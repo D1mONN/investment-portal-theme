@@ -108,7 +108,7 @@ export default defineConfig(({ command, mode }) => {
       port: 5173,
       strictPort: true,
       hmr: {
-        host: 'localhost',
+        host: '0.0.0.0',
       },
       // Proxy WordPress site for development
       proxy: {
