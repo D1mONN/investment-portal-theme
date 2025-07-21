@@ -1,0 +1,370 @@
+// FILE: assets/scss/layout/_footer.scss
+
+/**
+ * Footer Layout Styles
+ * 
+ * This file contains all styles for the site footer, including contact information,
+ * navigation links, newsletter subscription, and social media integration.
+ */
+
+// -----------------------------------------------------------------------------
+// Footer Container
+// -----------------------------------------------------------------------------
+
+.site-footer {
+  background-color: $color-gray-900;
+  color: $color-text-inverse;
+  margin-top: $spacing-24;
+  
+  a {
+    color: $color-gray-400;
+    text-decoration: none;
+    transition: $transition-fast;
+    
+    &:hover {
+      color: $color-white;
+      text-decoration: none;
+    }
+    
+    &:focus {
+      outline-color: $color-white;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Footer Main Section
+// -----------------------------------------------------------------------------
+
+.footer-main {
+  padding: $spacing-16 0;
+  border-bottom: $border-width solid rgba($color-white, 0.1);
+  
+  @include media-down(md) {
+    padding: $spacing-12 0;
+  }
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 2fr;
+  gap: $spacing-8;
+  
+  @include media-down(lg) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-10;
+  }
+  
+  @include media-down(sm) {
+    grid-template-columns: 1fr;
+    gap: $spacing-8;
+  }
+}
+
+.footer-column {
+  > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+.footer-title {
+  margin-bottom: $spacing-6;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-white;
+  
+  @include media-down(sm) {
+    font-size: $font-size-md;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Footer About Section
+// -----------------------------------------------------------------------------
+
+.footer-about {
+  .footer-description {
+    margin-bottom: $spacing-6;
+    font-size: $font-size-sm;
+    line-height: $line-height-relaxed;
+    color: $color-gray-400;
+  }
+  
+  .social-links {
+    display: flex;
+    gap: $spacing-3;
+    
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: rgba($color-white, 0.1);
+      border-radius: $border-radius-full;
+      transition: $transition-fast;
+      
+      &:hover {
+        background-color: $color-primary;
+        transform: translateY(-2px);
+      }
+      
+      svg {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+      }
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Footer Navigation
+// -----------------------------------------------------------------------------
+
+.footer-links {
+  .footer-menu {
+    @include reset-list;
+    
+    li {
+      margin-bottom: $spacing-3;
+      
+      a {
+        display: inline-block;
+        font-size: $font-size-sm;
+        padding: $spacing-1 0;
+        position: relative;
+        
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 0;
+          height: 1px;
+          background-color: $color-primary;
+          transition: width $transition-fast;
+        }
+        
+        &:hover::after {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Footer Contacts
+// -----------------------------------------------------------------------------
+
+.footer-contacts {
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-3;
+    margin-bottom: $spacing-4;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    .contact-icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      color: $color-primary;
+      fill: currentColor;
+    }
+    
+    span,
+    a {
+      font-size: $font-size-sm;
+      line-height: $line-height-relaxed;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Newsletter Section
+// -----------------------------------------------------------------------------
+
+.footer-newsletter {
+  .newsletter-description {
+    margin-bottom: $spacing-5;
+    font-size: $font-size-sm;
+    color: $color-gray-400;
+  }
+  
+  .newsletter-form {
+    display: flex;
+    gap: $spacing-3;
+    
+    @include media-down(sm) {
+      flex-direction: column;
+    }
+    
+    input[type="email"] {
+      @include form-control;
+      flex: 1;
+      background-color: rgba($color-white, 0.1);
+      border-color: rgba($color-white, 0.2);
+      color: $color-white;
+      
+      &::placeholder {
+        color: rgba($color-white, 0.5);
+      }
+      
+      &:focus {
+        background-color: rgba($color-white, 0.15);
+        border-color: $color-primary;
+      }
+    }
+    
+    button[type="submit"] {
+      @include button-base;
+      @include button-variant($color-primary);
+      white-space: nowrap;
+      
+      @include media-down(sm) {
+        width: 100%;
+      }
+    }
+  }
+  
+  // Fluent Forms integration styles
+  .fluentform {
+    .ff-el-group {
+      margin-bottom: 0;
+    }
+    
+    .ff-el-input--content {
+      input[type="email"] {
+        @include form-control;
+        background-color: rgba($color-white, 0.1);
+        border-color: rgba($color-white, 0.2);
+        color: $color-white;
+        
+        &::placeholder {
+          color: rgba($color-white, 0.5);
+        }
+      }
+    }
+    
+    .ff-btn-submit {
+      @include button-base;
+      @include button-variant($color-primary);
+      margin-top: $spacing-3;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Footer Bottom
+// -----------------------------------------------------------------------------
+
+.footer-bottom {
+  padding: $spacing-6 0;
+  background-color: rgba($color-black, 0.3);
+}
+
+.footer-bottom-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-6;
+  
+  @include media-down(sm) {
+    flex-direction: column;
+    text-align: center;
+    gap: $spacing-3;
+  }
+}
+
+.copyright {
+  font-size: $font-size-sm;
+  color: $color-gray-400;
+}
+
+.footer-credits {
+  font-size: $font-size-sm;
+  color: $color-gray-400;
+  
+  .heart {
+    display: inline-block;
+    color: $color-danger;
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(1.1);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.1);
+  }
+  56% {
+    transform: scale(1);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Back to Top Button
+// -----------------------------------------------------------------------------
+
+.back-to-top {
+  position: fixed;
+  bottom: $spacing-6;
+  right: $spacing-6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-color: $color-primary;
+  color: $color-white;
+  border-radius: $border-radius-full;
+  box-shadow: $shadow-lg;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: $transition-base;
+  z-index: $z-index-fixed;
+  
+  &.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  
+  &:hover {
+    background-color: $color-primary-dark;
+    transform: translateY(-2px);
+    box-shadow: $shadow-xl;
+  }
+  
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  @include media-down(sm) {
+    bottom: $spacing-4;
+    right: $spacing-4;
+    width: 40px;
+    height: 40px;
+    
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}

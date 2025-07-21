@@ -1,0 +1,20 @@
+/*
+Theme Name: Slavuta Invest
+Theme URI: https://invest.slavuta-rada.gov.ua
+Author: Slavuta Development Team
+Author URI: https://slavuta-rada.gov.ua
+Description: Кастомна тема для інвестиційного порталу Славутської міської територіальної громади
+Version: 1.0.0
+License: GPL v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: slavuta-invest
+Domain Path: /languages
+Tags: custom-theme, investment-portal, acf-pro, wpml-ready
+
+This theme, like WordPress, is licensed under the GPL.
+*/
+
+/* 
+ * Основні стилі знаходяться в /assets/scss/main.scss
+ * і компілюються через Vite.js
+ */

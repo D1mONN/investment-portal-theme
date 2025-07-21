@@ -1,0 +1,570 @@
+// FILE: assets/scss/pages/_archive.scss
+
+/**
+ * Archive Page Styles
+ * 
+ * This file provides comprehensive styling for archive pages, including
+ * category listings, search results, and filtered content displays.
+ */
+
+// -----------------------------------------------------------------------------
+// Archive Section Structure
+// -----------------------------------------------------------------------------
+
+.archive-section {
+  padding: $spacing-16 0;
+  min-height: 60vh;
+  
+  @include media-down(md) {
+    padding: $spacing-12 0;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Archive Header
+// -----------------------------------------------------------------------------
+
+.archive-header {
+  text-align: center;
+  margin-bottom: $spacing-12;
+  padding-bottom: $spacing-8;
+  border-bottom: $border-width solid $border-color;
+  
+  @include media-down(md) {
+    margin-bottom: $spacing-8;
+    padding-bottom: $spacing-6;
+  }
+  
+  .archive-title {
+    margin-bottom: $spacing-4;
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    
+    @include media-up(md) {
+      font-size: $font-size-4xl;
+    }
+    
+    // Archive type prefix
+    .archive-prefix {
+      display: block;
+      margin-bottom: $spacing-2;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-normal;
+      color: $color-text-secondary;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+  }
+  
+  .archive-description {
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: $font-size-lg;
+    line-height: $line-height-relaxed;
+    color: $color-text-secondary;
+    
+    @include media-down(md) {
+      font-size: $font-size-md;
+    }
+  }
+  
+  // Archive meta information
+  .archive-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-6;
+    margin-top: $spacing-6;
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+    
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: $spacing-2;
+      
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Archive Filters
+// -----------------------------------------------------------------------------
+
+.archive-filters {
+  background-color: $color-gray-50;
+  padding: $spacing-6;
+  margin-bottom: $spacing-8;
+  border-radius: $border-radius-lg;
+  
+  @include media-down(md) {
+    padding: $spacing-4;
+    margin-bottom: $spacing-6;
+  }
+  
+  .filters-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-4;
+    
+    @include media-down(md) {
+      flex-direction: column;
+    }
+  }
+  
+  .filters-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-4;
+    width: 100%;
+    
+    @include media-up(lg) {
+      align-items: flex-end;
+    }
+  }
+  
+  .filter-item {
+    flex: 1;
+    min-width: 200px;
+    
+    @include media-down(md) {
+      min-width: 100%;
+    }
+  }
+  
+  .filter-label {
+    display: block;
+    margin-bottom: $spacing-2;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+  }
+  
+  .filter-select {
+    @include form-control;
+    width: 100%;
+  }
+  
+  .filter-buttons {
+    display: flex;
+    gap: $spacing-3;
+    align-items: center;
+    
+    @include media-down(sm) {
+      width: 100%;
+      
+      .btn {
+        flex: 1;
+      }
+    }
+  }
+}
+
+// Advanced filters toggle
+.advanced-filters-toggle {
+  @include reset-button;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  margin-top: $spacing-4;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-primary;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+  
+  svg {
+    width: 16px;
+    height: 16px;
+    transition: transform $transition-fast;
+  }
+  
+  &[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+  }
+}
+
+.advanced-filters {
+  display: none;
+  margin-top: $spacing-4;
+  padding-top: $spacing-4;
+  border-top: $border-width solid $border-color;
+  
+  &.active {
+    display: block;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Archive Results
+// -----------------------------------------------------------------------------
+
+.archive-results {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-4;
+  margin-bottom: $spacing-6;
+  padding-bottom: $spacing-4;
+  border-bottom: $border-width solid $border-color;
+  
+  @include media-down(sm) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .results-count {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    
+    strong {
+      color: $color-text-primary;
+      font-weight: $font-weight-semibold;
+    }
+  }
+  
+  .results-view {
+    display: flex;
+    gap: $spacing-2;
+    
+    .view-button {
+      @include reset-button;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      color: $color-text-secondary;
+      background-color: $color-white;
+      border: $border-width solid $border-color;
+      border-radius: $border-radius;
+      transition: $transition-fast;
+      
+      &:hover {
+        color: $color-primary;
+        border-color: $color-primary;
+        background-color: rgba($color-primary, 0.05);
+      }
+      
+      &.active {
+        color: $color-white;
+        background-color: $color-primary;
+        border-color: $color-primary;
+      }
+      
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// No Results State
+// -----------------------------------------------------------------------------
+
+.no-results {
+  text-align: center;
+  padding: $spacing-16 0;
+  
+  .no-results-icon {
+    display: inline-block;
+    margin-bottom: $spacing-6;
+    color: $color-gray-300;
+  }
+  
+  .no-results-title {
+    margin-bottom: $spacing-4;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+  }
+  
+  .no-results-text {
+    margin-bottom: $spacing-6;
+    font-size: $font-size-lg;
+    color: $color-text-secondary;
+  }
+  
+  .no-results-suggestions {
+    max-width: 500px;
+    margin: 0 auto $spacing-8;
+    padding: $spacing-6;
+    background-color: $color-gray-50;
+    border-radius: $border-radius;
+    text-align: left;
+    
+    h3 {
+      margin-bottom: $spacing-3;
+      font-size: $font-size-md;
+      font-weight: $font-weight-semibold;
+    }
+    
+    ul {
+      @include reset-list;
+      
+      li {
+        position: relative;
+        padding-left: $spacing-5;
+        margin-bottom: $spacing-2;
+        color: $color-text-secondary;
+        
+        &::before {
+          content: '•';
+          position: absolute;
+          left: $spacing-2;
+          color: $color-primary;
+        }
+      }
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Archive Content Layouts
+// -----------------------------------------------------------------------------
+
+// List view
+.archive-list {
+  .content-item {
+    display: flex;
+    gap: $spacing-6;
+    padding: $spacing-6 0;
+    border-bottom: $border-width solid $border-color;
+    
+    &:first-child {
+      padding-top: 0;
+    }
+    
+    &:last-child {
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    
+    @include media-down(md) {
+      flex-direction: column;
+      gap: $spacing-4;
+      padding: $spacing-4 0;
+    }
+    
+    .item-image {
+      flex: 0 0 200px;
+      
+      @include media-down(md) {
+        flex: none;
+      }
+      
+      img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: $border-radius;
+      }
+    }
+    
+    .item-content {
+      flex: 1;
+      
+      .item-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $spacing-3;
+        margin-bottom: $spacing-2;
+        font-size: $font-size-sm;
+        color: $color-text-muted;
+        
+        a {
+          color: $color-primary;
+          text-decoration: none;
+          
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+      
+      .item-title {
+        margin-bottom: $spacing-3;
+        font-size: $font-size-xl;
+        font-weight: $font-weight-semibold;
+        line-height: $line-height-tight;
+        
+        a {
+          color: $color-text-primary;
+          text-decoration: none;
+          
+          &:hover {
+            color: $color-primary;
+          }
+        }
+      }
+      
+      .item-excerpt {
+        margin-bottom: $spacing-4;
+        color: $color-text-secondary;
+        @include line-clamp(2);
+      }
+      
+      .item-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: $spacing-4;
+        
+        @include media-down(sm) {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Archive Sidebar Layout
+// -----------------------------------------------------------------------------
+
+.archive-with-sidebar {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: $spacing-8;
+  align-items: start;
+  
+  @include media-down(lg) {
+    grid-template-columns: 1fr;
+  }
+  
+  .archive-main {
+    min-width: 0; // Prevent overflow
+  }
+  
+  .archive-sidebar {
+    @include media-down(lg) {
+      margin-top: $spacing-8;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Search Results Specific
+// -----------------------------------------------------------------------------
+
+.search-results {
+  .search-query {
+    display: inline-block;
+    padding: $spacing-1 $spacing-3;
+    background-color: rgba($color-primary, 0.1);
+    color: $color-primary;
+    border-radius: $border-radius;
+    font-weight: $font-weight-medium;
+  }
+  
+  .search-highlight {
+    background-color: rgba($color-accent, 0.3);
+    color: $color-text-primary;
+    font-weight: $font-weight-medium;
+    padding: 0 2px;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Author Archive
+// -----------------------------------------------------------------------------
+
+.author-archive {
+  .author-bio {
+    display: flex;
+    gap: $spacing-6;
+    padding: $spacing-8;
+    margin-bottom: $spacing-8;
+    background-color: $color-gray-50;
+    border-radius: $border-radius-lg;
+    
+    @include media-down(sm) {
+      flex-direction: column;
+      gap: $spacing-4;
+      padding: $spacing-6;
+      text-align: center;
+    }
+    
+    .author-avatar {
+      flex: 0 0 120px;
+      
+      img {
+        width: 120px;
+        height: 120px;
+        border-radius: $border-radius-full;
+        object-fit: cover;
+      }
+    }
+    
+    .author-info {
+      flex: 1;
+      
+      .author-name {
+        margin-bottom: $spacing-2;
+        font-size: $font-size-2xl;
+        font-weight: $font-weight-semibold;
+      }
+      
+      .author-description {
+        margin-bottom: $spacing-4;
+        color: $color-text-secondary;
+        line-height: $line-height-relaxed;
+      }
+      
+      .author-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $spacing-4;
+        font-size: $font-size-sm;
+        color: $color-text-muted;
+        
+        @include media-down(sm) {
+          justify-content: center;
+        }
+        
+        .meta-item {
+          display: flex;
+          align-items: center;
+          gap: $spacing-1;
+          
+          svg {
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Date Archive
+// -----------------------------------------------------------------------------
+
+.date-archive {
+  .archive-calendar {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-2;
+    padding: $spacing-3 $spacing-5;
+    background-color: $color-gray-100;
+    border-radius: $border-radius-full;
+    font-weight: $font-weight-medium;
+    
+    svg {
+      width: 20px;
+      height: 20px;
+      color: $color-primary;
+    }
+  }
+}

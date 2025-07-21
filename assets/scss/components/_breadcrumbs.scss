@@ -1,0 +1,292 @@
+// FILE: assets/scss/components/_breadcrumbs.scss
+
+/**
+ * Breadcrumbs Component Styles
+ * 
+ * This file provides comprehensive styling for breadcrumb navigation,
+ * ensuring clear hierarchical navigation throughout the portal.
+ */
+
+// -----------------------------------------------------------------------------
+// Base Breadcrumbs Styles
+// -----------------------------------------------------------------------------
+
+.breadcrumbs-section {
+  padding: $spacing-4 0;
+  background-color: $color-gray-50;
+  border-bottom: $border-width solid $border-color;
+  
+  @include media-up(md) {
+    padding: $spacing-6 0;
+  }
+}
+
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  
+  @include media-up(md) {
+    font-size: $font-size-md;
+  }
+  
+  // Links
+  a {
+    color: $color-text-secondary;
+    text-decoration: none;
+    transition: $transition-fast;
+    position: relative;
+    
+    &:hover {
+      color: $color-primary;
+      text-decoration: none;
+    }
+    
+    &:focus {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
+      border-radius: $border-radius-sm;
+    }
+  }
+  
+  // Separator
+  .separator {
+    display: inline-block;
+    margin: 0 $spacing-3;
+    color: $color-text-muted;
+    
+    @include media-down(sm) {
+      margin: 0 $spacing-2;
+    }
+  }
+  
+  // Current item
+  .current {
+    color: $color-text-primary;
+    font-weight: $font-weight-medium;
+    @include text-truncate;
+    max-width: 300px;
+    
+    @include media-down(sm) {
+      max-width: 150px;
+    }
+  }
+  
+  // Home icon
+  .home-link {
+    display: inline-flex;
+    align-items: center;
+    
+    svg {
+      width: 16px;
+      height: 16px;
+      margin-right: $spacing-1;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Schema.org Microdata Support
+// -----------------------------------------------------------------------------
+
+.breadcrumbs[itemscope] {
+  // Microdata item styling
+  [itemprop="itemListElement"] {
+    display: inline;
+  }
+  
+  // Position indicator (hidden visually)
+  [itemprop="position"] {
+    @include visually-hidden;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Breadcrumbs Variations
+// -----------------------------------------------------------------------------
+
+// Centered breadcrumbs
+.breadcrumbs-centered {
+  .breadcrumbs {
+    justify-content: center;
+  }
+}
+
+// Breadcrumbs with background
+.breadcrumbs-dark {
+  background-color: $color-gray-900;
+  border-bottom-color: rgba($color-white, 0.1);
+  
+  .breadcrumbs {
+    color: rgba($color-white, 0.7);
+    
+    a {
+      color: rgba($color-white, 0.7);
+      
+      &:hover {
+        color: $color-white;
+      }
+    }
+    
+    .separator {
+      color: rgba($color-white, 0.5);
+    }
+    
+    .current {
+      color: $color-white;
+    }
+  }
+}
+
+// Breadcrumbs with icons
+.breadcrumbs-with-icons {
+  .breadcrumbs {
+    a,
+    .current {
+      display: inline-flex;
+      align-items: center;
+      gap: $spacing-1;
+      
+      svg {
+        width: 16px;
+        height: 16px;
+        opacity: 0.7;
+      }
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Alternative Separator Styles
+// -----------------------------------------------------------------------------
+
+// Chevron separator
+.breadcrumbs-chevron {
+  .separator {
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 10px;
+      border-right: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      transform: rotate(-45deg) translateY(-2px);
+      margin: 0 2px;
+    }
+  }
+}
+
+// Dot separator
+.breadcrumbs-dot {
+  .separator {
+    &::before {
+      content: '•';
+    }
+  }
+}
+
+// Arrow separator
+.breadcrumbs-arrow {
+  .separator {
+    &::before {
+      content: '→';
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Mobile Optimizations
+// -----------------------------------------------------------------------------
+
+@include media-down(sm) {
+  .breadcrumbs {
+    // Collapse to single line with ellipsis
+    &.breadcrumbs-mobile-collapse {
+      > *:not(:nth-last-child(-n+3)) {
+        display: none;
+      }
+      
+      > *:nth-last-child(3) {
+        &::before {
+          content: '...';
+          margin-right: $spacing-3;
+          color: $color-text-muted;
+        }
+      }
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// WordPress Compatibility
+// -----------------------------------------------------------------------------
+
+// Yoast SEO breadcrumbs
+.yoast-breadcrumb {
+  @extend .breadcrumbs;
+  
+  span[aria-current="page"] {
+    @extend .current;
+  }
+}
+
+// Rank Math breadcrumbs
+.rank-math-breadcrumb {
+  @extend .breadcrumbs;
+  
+  .separator {
+    margin: 0 $spacing-3;
+  }
+  
+  .last {
+    @extend .current;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Accessibility Enhancements
+// -----------------------------------------------------------------------------
+
+// Screen reader text for navigation context
+.breadcrumbs-nav {
+  .screen-reader-text {
+    @include visually-hidden;
+  }
+}
+
+// Focus visible states
+.breadcrumbs {
+  a:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+    border-radius: $border-radius-sm;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Print Styles
+// -----------------------------------------------------------------------------
+
+@media print {
+  .breadcrumbs-section {
+    display: none;
+  }
+  
+  // If breadcrumbs should be printed
+  .breadcrumbs-print {
+    display: block !important;
+    padding: $spacing-2 0;
+    border-bottom: 1px solid #000;
+    
+    .breadcrumbs {
+      color: #000;
+      
+      a {
+        color: #000;
+        text-decoration: underline;
+      }
+    }
+  }
+}

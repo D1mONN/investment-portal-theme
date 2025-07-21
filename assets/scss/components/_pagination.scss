@@ -1,0 +1,484 @@
+// FILE: assets/scss/components/_pagination.scss
+
+/**
+ * Pagination Component Styles
+ * 
+ * This file provides comprehensive styling for pagination elements,
+ * ensuring intuitive navigation through multi-page content listings.
+ */
+
+// -----------------------------------------------------------------------------
+// Base Pagination Styles
+// -----------------------------------------------------------------------------
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-2;
+  margin: $spacing-10 0;
+  
+  @include media-down(sm) {
+    gap: $spacing-1;
+    margin: $spacing-8 0;
+  }
+  
+  // Pagination items
+  a,
+  span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 44px;
+    padding: $spacing-2 $spacing-3;
+    font-size: $font-size-md;
+    font-weight: $font-weight-medium;
+    line-height: 1;
+    color: $color-text-primary;
+    text-decoration: none;
+    background-color: $color-white;
+    border: $border-width solid $border-color;
+    border-radius: $border-radius;
+    transition: $transition-fast;
+    
+    @include media-down(sm) {
+      min-width: 36px;
+      height: 36px;
+      padding: $spacing-2;
+      font-size: $font-size-sm;
+    }
+    
+    &:hover {
+      color: $color-primary;
+      background-color: rgba($color-primary, 0.05);
+      border-color: $color-primary;
+      transform: translateY(-1px);
+      box-shadow: $shadow-sm;
+    }
+    
+    &:focus {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
+    }
+    
+    &:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+  }
+  
+  // Current page
+  .current,
+  span.current {
+    color: $color-white;
+    background-color: $color-primary;
+    border-color: $color-primary;
+    cursor: default;
+    pointer-events: none;
+  }
+  
+  // Disabled state
+  .disabled,
+  span.dots {
+    color: $color-text-muted;
+    background-color: $color-gray-50;
+    border-color: $color-gray-200;
+    cursor: default;
+    pointer-events: none;
+    
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+  
+  // Previous/Next links
+  .prev,
+  .next {
+    font-weight: $font-weight-normal;
+    
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+  
+  .prev {
+    svg {
+      margin-right: $spacing-1;
+    }
+  }
+  
+  .next {
+    svg {
+      margin-left: $spacing-1;
+    }
+  }
+  
+  // First/Last links
+  .first,
+  .last {
+    @include media-down(sm) {
+      display: none;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Pagination Variations
+// -----------------------------------------------------------------------------
+
+// Large pagination
+.pagination-lg {
+  a,
+  span {
+    min-width: 52px;
+    height: 52px;
+    padding: $spacing-3 $spacing-4;
+    font-size: $font-size-lg;
+  }
+}
+
+// Small pagination
+.pagination-sm {
+  a,
+  span {
+    min-width: 32px;
+    height: 32px;
+    padding: $spacing-1 $spacing-2;
+    font-size: $font-size-sm;
+  }
+}
+
+// Rounded pagination
+.pagination-rounded {
+  a,
+  span {
+    border-radius: $border-radius-full;
+  }
+}
+
+// Pagination without borders
+.pagination-borderless {
+  a,
+  span {
+    border-color: transparent;
+    
+    &:hover {
+      border-color: transparent;
+      background-color: $color-gray-100;
+    }
+    
+    &.current {
+      border-color: $color-primary;
+    }
+  }
+}
+
+// Pagination with shadow
+.pagination-shadow {
+  a,
+  span {
+    box-shadow: $shadow-sm;
+    
+    &:hover {
+      box-shadow: $shadow-md;
+    }
+    
+    &.current {
+      box-shadow: $shadow-md;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Pagination Alignment
+// -----------------------------------------------------------------------------
+
+.pagination-left {
+  justify-content: flex-start;
+}
+
+.pagination-right {
+  justify-content: flex-end;
+}
+
+.pagination-center {
+  justify-content: center;
+}
+
+// -----------------------------------------------------------------------------
+// Pagination Info
+// -----------------------------------------------------------------------------
+
+.pagination-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-4;
+  
+  @include media-up(md) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.pagination-info {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  
+  strong {
+    color: $color-text-primary;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Load More Button
+// -----------------------------------------------------------------------------
+
+.load-more-wrapper {
+  text-align: center;
+  margin: $spacing-10 0;
+}
+
+.load-more-button {
+  @extend .btn;
+  @extend .btn-outline;
+  min-width: 200px;
+  
+  &.loading {
+    color: transparent;
+    pointer-events: none;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 50%;
+      left: 50%;
+      margin: -10px 0 0 -10px;
+      border: 2px solid $color-primary;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: pagination-spinner 0.8s linear infinite;
+    }
+  }
+}
+
+@keyframes pagination-spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Infinite Scroll
+// -----------------------------------------------------------------------------
+
+.infinite-scroll-wrapper {
+  position: relative;
+  
+  .infinite-scroll-loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-8;
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid $color-gray-300;
+      border-top-color: $color-primary;
+      border-radius: 50%;
+      animation: pagination-spinner 0.8s linear infinite;
+    }
+  }
+  
+  .infinite-scroll-end {
+    text-align: center;
+    padding: $spacing-8;
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+  }
+  
+  .infinite-scroll-error {
+    text-align: center;
+    padding: $spacing-8;
+    
+    .error-message {
+      margin-bottom: $spacing-4;
+      color: $color-danger;
+    }
+    
+    .retry-button {
+      @extend .btn;
+      @extend .btn-outline;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// WordPress Compatibility
+// -----------------------------------------------------------------------------
+
+// WordPress default pagination
+.nav-links {
+  @extend .pagination;
+  
+  .page-numbers {
+    &.current {
+      @extend .current;
+    }
+    
+    &.dots {
+      @extend .dots;
+    }
+  }
+  
+  .prev.page-numbers {
+    @extend .prev;
+  }
+  
+  .next.page-numbers {
+    @extend .next;
+  }
+}
+
+// WP PageNavi compatibility
+.wp-pagenavi {
+  @extend .pagination;
+  
+  .current {
+    @extend .current;
+  }
+  
+  .extend {
+    @extend .dots;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// AJAX Pagination
+// -----------------------------------------------------------------------------
+
+.ajax-pagination {
+  position: relative;
+  
+  &.loading {
+    pointer-events: none;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba($color-white, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .pagination {
+      opacity: 0.5;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Mobile Pagination
+// -----------------------------------------------------------------------------
+
+@include media-down(sm) {
+  // Simplified mobile pagination
+  .pagination-mobile-simple {
+    .pagination {
+      a,
+      span {
+        &:not(.prev):not(.next):not(.current) {
+          display: none;
+        }
+        
+        &.current {
+          position: relative;
+          
+          &::before,
+          &::after {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: $color-text-muted;
+            font-weight: $font-weight-normal;
+            pointer-events: none;
+          }
+          
+          &::before {
+            content: attr(data-page-info);
+            right: calc(100% + #{$spacing-2});
+            white-space: nowrap;
+            font-size: $font-size-xs;
+          }
+        }
+      }
+    }
+  }
+  
+  // Compact mobile pagination
+  .pagination-mobile-compact {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    
+    a,
+    span {
+      flex-shrink: 0;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Accessibility
+// -----------------------------------------------------------------------------
+
+.pagination {
+  // Screen reader text
+  .screen-reader-text {
+    @include visually-hidden;
+  }
+  
+  // Focus states
+  a:focus-visible {
+    outline: 3px solid $color-primary;
+    outline-offset: 2px;
+  }
+  
+  // ARIA labels
+  [aria-current="page"] {
+    @extend .current;
+  }
+  
+  [aria-disabled="true"] {
+    @extend .disabled;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Print Styles
+// -----------------------------------------------------------------------------
+
+@media print {
+  .pagination,
+  .load-more-wrapper,
+  .infinite-scroll-wrapper {
+    display: none;
+  }
+}

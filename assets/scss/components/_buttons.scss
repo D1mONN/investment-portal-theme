@@ -1,0 +1,378 @@
+// FILE: assets/scss/components/_buttons.scss
+
+/**
+ * Button Component Styles
+ * 
+ * This file defines all button variations and states used throughout the theme.
+ * Buttons are designed to be accessible, responsive, and visually consistent.
+ */
+
+// -----------------------------------------------------------------------------
+// Base Button Styles
+// -----------------------------------------------------------------------------
+
+.btn {
+  @include button-base;
+  
+  // Icon spacing
+  svg {
+    width: 1em;
+    height: 1em;
+    margin-left: $spacing-2;
+    transition: transform $transition-fast;
+  }
+  
+  &:hover svg {
+    transform: translateX(2px);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Button Variants
+// -----------------------------------------------------------------------------
+
+// Primary button
+.btn-primary {
+  @include button-variant($color-primary);
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba($color-primary, 0.25);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba($color-primary, 0.25);
+  }
+}
+
+// Secondary button
+.btn-secondary {
+  @include button-variant($color-secondary);
+}
+
+// Outline button
+.btn-outline {
+  color: $color-primary;
+  background-color: transparent;
+  border-color: $color-primary;
+  
+  &:hover {
+    color: $color-white;
+    background-color: $color-primary;
+    border-color: $color-primary;
+  }
+  
+  &:active {
+    color: $color-white;
+    background-color: $color-primary-dark;
+    border-color: $color-primary-dark;
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 3px rgba($color-primary, 0.25);
+  }
+}
+
+// Ghost button
+.btn-ghost {
+  color: $color-text-primary;
+  background-color: transparent;
+  border-color: transparent;
+  
+  &:hover {
+    color: $color-primary;
+    background-color: rgba($color-primary, 0.05);
+  }
+  
+  &:active {
+    background-color: rgba($color-primary, 0.1);
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 3px rgba($color-primary, 0.25);
+  }
+}
+
+// Danger button
+.btn-danger {
+  @include button-variant($color-danger);
+}
+
+// Success button
+.btn-success {
+  @include button-variant($color-success);
+}
+
+// -----------------------------------------------------------------------------
+// Button Sizes
+// -----------------------------------------------------------------------------
+
+// Small button
+.btn-sm {
+  padding: $spacing-2 $spacing-4;
+  font-size: $font-size-sm;
+  
+  svg {
+    margin-left: $spacing-1;
+  }
+}
+
+// Large button
+.btn-lg {
+  padding: $spacing-4 $spacing-8;
+  font-size: $font-size-lg;
+  
+  svg {
+    margin-left: $spacing-3;
+  }
+}
+
+// Extra large button
+.btn-xl {
+  padding: $spacing-5 $spacing-10;
+  font-size: $font-size-xl;
+  border-radius: $border-radius-lg;
+  
+  svg {
+    margin-left: $spacing-4;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Button States
+// -----------------------------------------------------------------------------
+
+// Block button
+.btn-block {
+  display: flex;
+  width: 100%;
+}
+
+// Loading state
+.btn-loading {
+  position: relative;
+  color: transparent;
+  pointer-events: none;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    top: 50%;
+    left: 50%;
+    margin-left: -0.5em;
+    margin-top: -0.5em;
+    border: 2px solid $color-white;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: button-spinner 0.6s linear infinite;
+  }
+}
+
+@keyframes button-spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Disabled state
+.btn:disabled,
+.btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+// -----------------------------------------------------------------------------
+// Button Groups
+// -----------------------------------------------------------------------------
+
+.btn-group {
+  display: inline-flex;
+  vertical-align: middle;
+  
+  > .btn {
+    position: relative;
+    flex: 0 1 auto;
+    
+    // Remove rounded corners on inner buttons
+    &:not(:first-child) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      margin-left: -$border-width;
+    }
+    
+    &:not(:last-child) {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    
+    // Bring focused button to front
+    &:focus {
+      z-index: 1;
+    }
+  }
+}
+
+// Vertical button group
+.btn-group-vertical {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  
+  > .btn {
+    width: 100%;
+    
+    &:not(:first-child) {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      margin-top: -$border-width;
+      margin-left: 0;
+    }
+    
+    &:not(:last-child) {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Icon Buttons
+// -----------------------------------------------------------------------------
+
+.btn-icon {
+  padding: $spacing-3;
+  
+  svg {
+    margin: 0;
+    width: 20px;
+    height: 20px;
+  }
+  
+  &.btn-sm {
+    padding: $spacing-2;
+    
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+  
+  &.btn-lg {
+    padding: $spacing-4;
+    
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+// Round icon button
+.btn-icon-round {
+  @extend .btn-icon;
+  border-radius: $border-radius-full;
+}
+
+// -----------------------------------------------------------------------------
+// Special Buttons
+// -----------------------------------------------------------------------------
+
+// Floating Action Button
+.btn-fab {
+  @extend .btn-icon-round;
+  @extend .btn-primary;
+  position: fixed;
+  bottom: $spacing-6;
+  right: $spacing-6;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  box-shadow: $shadow-lg;
+  z-index: $z-index-fixed;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-xl;
+  }
+  
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+// Call to Action button
+.btn-cta {
+  @extend .btn-primary;
+  @extend .btn-lg;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba($color-white, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+  
+  &:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Button Animations
+// -----------------------------------------------------------------------------
+
+// Pulse animation
+.btn-pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba($color-primary, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba($color-primary, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba($color-primary, 0);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Responsive Adjustments
+// -----------------------------------------------------------------------------
+
+@include media-down(sm) {
+  .btn {
+    font-size: $font-size-sm;
+  }
+  
+  .btn-group {
+    flex-direction: column;
+    width: 100%;
+    
+    > .btn {
+      width: 100%;
+      border-radius: $button-border-radius !important;
+      margin: 0 0 $spacing-2 0 !important;
+      
+      &:last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+  }
+}

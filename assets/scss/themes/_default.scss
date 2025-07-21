@@ -1,0 +1,466 @@
+// FILE: assets/scss/themes/_default.scss
+
+/**
+ * Default Theme Styles
+ * 
+ * This file establishes the default visual theme for the investment portal,
+ * providing consistent styling patterns and optional theme variations.
+ */
+
+// -----------------------------------------------------------------------------
+// Root CSS Custom Properties
+// -----------------------------------------------------------------------------
+
+:root {
+  // Color scheme
+  --color-primary: #{$color-primary};
+  --color-primary-light: #{$color-primary-light};
+  --color-primary-dark: #{$color-primary-dark};
+  --color-secondary: #{$color-secondary};
+  --color-secondary-light: #{$color-secondary-light};
+  --color-secondary-dark: #{$color-secondary-dark};
+  --color-accent: #{$color-accent};
+  
+  // Neutral colors
+  --color-text-primary: #{$color-text-primary};
+  --color-text-secondary: #{$color-text-secondary};
+  --color-text-muted: #{$color-text-muted};
+  --color-background: #{$color-background};
+  --color-background-alt: #{$color-background-alt};
+  
+  // Spacing
+  --spacing-unit: #{$spacing-unit};
+  
+  // Typography
+  --font-family-primary: #{$font-family-primary};
+  --font-size-base: #{$font-size-base};
+  --line-height-base: #{$line-height-normal};
+  
+  // Borders
+  --border-radius: #{$border-radius};
+  --border-color: #{$border-color};
+  
+  // Shadows
+  --shadow: #{$shadow};
+  --shadow-lg: #{$shadow-lg};
+  
+  // Transitions
+  --transition-base: #{$transition-base};
+  --transition-fast: #{$transition-fast};
+}
+
+// -----------------------------------------------------------------------------
+// Theme Variations
+// -----------------------------------------------------------------------------
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .theme-auto {
+    --color-text-primary: #{$color-white};
+    --color-text-secondary: #{rgba($color-white, 0.8)};
+    --color-text-muted: #{rgba($color-white, 0.6)};
+    --color-background: #{$color-gray-900};
+    --color-background-alt: #{$color-gray-800};
+    --border-color: #{rgba($color-white, 0.1)};
+    
+    // Component adjustments
+    .site-header {
+      background-color: var(--color-background);
+      border-bottom-color: var(--border-color);
+    }
+    
+    .card {
+      background-color: var(--color-background-alt);
+      border-color: var(--border-color);
+    }
+    
+    .btn-outline {
+      color: var(--color-primary-light);
+      border-color: var(--color-primary-light);
+      
+      &:hover {
+        background-color: var(--color-primary);
+        border-color: var(--color-primary);
+        color: $color-white;
+      }
+    }
+  }
+}
+
+// Explicit dark theme
+.theme-dark {
+  --color-text-primary: #{$color-white};
+  --color-text-secondary: #{rgba($color-white, 0.8)};
+  --color-text-muted: #{rgba($color-white, 0.6)};
+  --color-background: #{$color-gray-900};
+  --color-background-alt: #{$color-gray-800};
+  --border-color: #{rgba($color-white, 0.1)};
+  
+  // Force dark backgrounds
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+// High contrast theme
+.theme-high-contrast {
+  --color-primary: #0000FF;
+  --color-secondary: #008000;
+  --color-text-primary: #000000;
+  --color-text-secondary: #000000;
+  --color-background: #FFFFFF;
+  --border-color: #000000;
+  
+  // Increase contrasts
+  .btn {
+    border-width: 2px;
+  }
+  
+  a {
+    text-decoration: underline;
+  }
+  
+  .card {
+    border-width: 2px;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Component Theme Overrides
+// -----------------------------------------------------------------------------
+
+// Primary color variations
+.theme-blue {
+  --color-primary: #0066CC;
+  --color-primary-light: #3385D6;
+  --color-primary-dark: #004C99;
+}
+
+.theme-green {
+  --color-primary: #00A651;
+  --color-primary-light: #33B96E;
+  --color-primary-dark: #007F3E;
+}
+
+.theme-purple {
+  --color-primary: #6B46C1;
+  --color-primary-light: #8965D0;
+  --color-primary-dark: #553C9A;
+}
+
+// -----------------------------------------------------------------------------
+// Special Page Themes
+// -----------------------------------------------------------------------------
+
+// Government/Official theme
+.theme-official {
+  --font-family-primary: Georgia, 'Times New Roman', serif;
+  
+  .site-header {
+    background-color: $color-gray-900;
+    color: $color-white;
+    
+    a {
+      color: $color-white;
+    }
+  }
+  
+  .hero-section {
+    background-color: $color-primary;
+    color: $color-white;
+  }
+  
+  .btn-primary {
+    background-color: $color-gray-900;
+    border-color: $color-gray-900;
+    
+    &:hover {
+      background-color: $color-gray-800;
+      border-color: $color-gray-800;
+    }
+  }
+}
+
+// Modern/Tech theme
+.theme-modern {
+  --border-radius: 2px;
+  --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  .hero-section {
+    background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
+  }
+  
+  .card {
+    border: none;
+    box-shadow: $shadow-md;
+    
+    &:hover {
+      box-shadow: $shadow-xl;
+    }
+  }
+  
+  .btn {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Seasonal Themes
+// -----------------------------------------------------------------------------
+
+// Spring theme
+.theme-spring {
+  --color-primary: #4CAF50;
+  --color-secondary: #FF9800;
+  --color-accent: #E91E63;
+  
+  .hero-overlay {
+    background: linear-gradient(
+      135deg,
+      rgba(76, 175, 80, 0.8) 0%,
+      rgba(255, 152, 0, 0.6) 100%
+    );
+  }
+}
+
+// Winter theme
+.theme-winter {
+  --color-primary: #2196F3;
+  --color-secondary: #00BCD4;
+  --color-background: #FAFAFA;
+  
+  .hero-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Accessibility Themes
+// -----------------------------------------------------------------------------
+
+// Large text theme
+.theme-large-text {
+  --font-size-base: 18px;
+  
+  .btn {
+    padding: $spacing-4 $spacing-8;
+    font-size: $font-size-lg;
+  }
+  
+  .form-control {
+    height: 56px;
+    font-size: $font-size-lg;
+  }
+}
+
+// Reduced motion theme
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .hero-scroll-down {
+    animation: none;
+  }
+  
+  .btn:hover {
+    transform: none;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Print Theme
+// -----------------------------------------------------------------------------
+
+@media print {
+  :root {
+    --color-primary: #000000;
+    --color-text-primary: #000000;
+    --color-background: #FFFFFF;
+    --border-color: #000000;
+  }
+  
+  * {
+    color: #000000 !important;
+    background-color: #FFFFFF !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  .site-header,
+  .site-footer,
+  .hero-section,
+  .no-print {
+    display: none !important;
+  }
+  
+  .container {
+    max-width: 100%;
+    padding: 0;
+  }
+  
+  a {
+    text-decoration: underline;
+    
+    &[href]::after {
+      content: " (" attr(href) ")";
+      font-size: 0.9em;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Component-Specific Theme Adjustments
+// -----------------------------------------------------------------------------
+
+// Card hover effects based on theme
+.theme-modern {
+  .project-card,
+  .land-plot-card {
+    transition: all $transition-base;
+    
+    &:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 
+        0 20px 40px rgba($color-primary, 0.15),
+        0 0 0 1px rgba($color-primary, 0.1);
+    }
+  }
+}
+
+// Button theme variations
+.theme-gradient {
+  .btn-primary {
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+    border: none;
+    
+    &:hover {
+      background: linear-gradient(135deg, $color-primary-light 0%, $color-primary 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba($color-primary, 0.3);
+    }
+  }
+}
+
+// Form theme variations
+.theme-modern {
+  .form-control {
+    border: none;
+    border-bottom: 2px solid $border-color;
+    border-radius: 0;
+    padding-left: 0;
+    padding-right: 0;
+    background-color: transparent;
+    
+    &:focus {
+      border-bottom-color: $color-primary;
+      box-shadow: none;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Theme Switcher Styles
+// -----------------------------------------------------------------------------
+
+.theme-switcher {
+  position: fixed;
+  bottom: $spacing-6;
+  left: $spacing-6;
+  z-index: $z-index-fixed;
+  
+  @include media-down(sm) {
+    bottom: $spacing-4;
+    left: $spacing-4;
+  }
+  
+  .theme-switcher-toggle {
+    @include reset-button;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background-color: $color-primary;
+    color: $color-white;
+    border-radius: $border-radius-full;
+    box-shadow: $shadow-lg;
+    transition: $transition-base;
+    
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: $shadow-xl;
+    }
+    
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+  
+  .theme-switcher-menu {
+    position: absolute;
+    bottom: calc(100% + #{$spacing-2});
+    left: 0;
+    min-width: 200px;
+    padding: $spacing-2 0;
+    background-color: $color-white;
+    border-radius: $border-radius;
+    box-shadow: $shadow-xl;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: $transition-fast;
+    
+    &.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    
+    .theme-option {
+      display: flex;
+      align-items: center;
+      gap: $spacing-3;
+      padding: $spacing-3 $spacing-4;
+      color: $color-text-primary;
+      text-decoration: none;
+      transition: $transition-fast;
+      cursor: pointer;
+      
+      &:hover {
+        background-color: $color-gray-50;
+      }
+      
+      &.active {
+        color: $color-primary;
+        background-color: rgba($color-primary, 0.1);
+      }
+      
+      .theme-preview {
+        display: flex;
+        gap: 2px;
+        
+        .color-dot {
+          width: 12px;
+          height: 12px;
+          border-radius: $border-radius-full;
+          border: 1px solid rgba($color-black, 0.1);
+        }
+      }
+    }
+  }
+}

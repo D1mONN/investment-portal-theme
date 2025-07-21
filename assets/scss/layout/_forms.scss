@@ -1,0 +1,515 @@
+// FILE: assets/scss/layout/_forms.scss
+
+/**
+ * Form Layout Styles
+ * 
+ * This file contains comprehensive styling for all form elements,
+ * ensuring consistency and accessibility across the theme.
+ */
+
+// -----------------------------------------------------------------------------
+// Form Container Styles
+// -----------------------------------------------------------------------------
+
+form {
+  margin-bottom: $spacing-6;
+}
+
+.form-group {
+  margin-bottom: $spacing-5;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: $spacing-4;
+  margin-bottom: $spacing-5;
+  
+  @include media-down(sm) {
+    flex-direction: column;
+    gap: $spacing-5;
+  }
+  
+  .form-group {
+    flex: 1;
+    margin-bottom: 0;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Labels
+// -----------------------------------------------------------------------------
+
+label {
+  display: inline-block;
+  margin-bottom: $spacing-2;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  
+  &.required::after {
+    content: ' *';
+    color: $color-danger;
+  }
+}
+
+.form-label {
+  @extend label;
+}
+
+.screen-reader-text {
+  @include visually-hidden;
+}
+
+// -----------------------------------------------------------------------------
+// Input Fields
+// -----------------------------------------------------------------------------
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+select,
+textarea {
+  @include form-control;
+}
+
+// Textarea specific styles
+textarea {
+  min-height: 120px;
+  padding-top: $spacing-3;
+  padding-bottom: $spacing-3;
+  resize: vertical;
+}
+
+// Select specific styles
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23#{str-slice(inspect($color-text-secondary), 2)}' d='M10.293.293a1 1 0 0 1 1.414 1.414l-5 5a1 1 0 0 1-1.414 0l-5-5A1 1 0 0 1 1.707.293L6 4.586 10.293.293z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right $spacing-3 center;
+  background-size: 12px 8px;
+  padding-right: $spacing-10;
+  
+  &::-ms-expand {
+    display: none;
+  }
+}
+
+// Number input - remove spinners
+input[type="number"] {
+  -moz-appearance: textfield;
+  
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+// Search input - remove webkit search decoration
+input[type="search"] {
+  -webkit-appearance: textfield;
+  
+  &::-webkit-search-decoration,
+  &::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Input Groups
+// -----------------------------------------------------------------------------
+
+.input-group {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  
+  input {
+    flex: 1;
+    border-radius: 0;
+    
+    &:first-child {
+      border-top-left-radius: $input-border-radius;
+      border-bottom-left-radius: $input-border-radius;
+    }
+    
+    &:last-child {
+      border-top-right-radius: $input-border-radius;
+      border-bottom-right-radius: $input-border-radius;
+    }
+  }
+  
+  .input-group-prepend,
+  .input-group-append {
+    display: flex;
+    align-items: center;
+    padding: 0 $spacing-4;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+    background-color: $color-gray-100;
+    border: $border-width solid $input-border-color;
+  }
+  
+  .input-group-prepend {
+    border-right: 0;
+    border-radius: $input-border-radius 0 0 $input-border-radius;
+    
+    + input {
+      border-left: 0;
+    }
+  }
+  
+  .input-group-append {
+    border-left: 0;
+    border-radius: 0 $input-border-radius $input-border-radius 0;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Checkboxes and Radio Buttons
+// -----------------------------------------------------------------------------
+
+.form-check {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: $spacing-3;
+  
+  input[type="checkbox"],
+  input[type="radio"] {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    margin-top: 0.125em;
+    margin-right: $spacing-3;
+    vertical-align: top;
+    background-color: $color-white;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    border: $border-width-2 solid $input-border-color;
+    appearance: none;
+    cursor: pointer;
+    transition: $transition-fast;
+    
+    &:checked {
+      background-color: $color-primary;
+      border-color: $color-primary;
+    }
+    
+    &:focus {
+      outline: 0;
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.25);
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+  
+  input[type="checkbox"] {
+    border-radius: $border-radius-sm;
+    
+    &:checked {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='white'%3E%3Cpath fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    }
+  }
+  
+  input[type="radio"] {
+    border-radius: $border-radius-full;
+    
+    &:checked {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='white'%3E%3Ccircle cx='10' cy='10' r='4'/%3E%3C/svg%3E");
+    }
+  }
+  
+  label {
+    margin-bottom: 0;
+    font-weight: $font-weight-normal;
+    cursor: pointer;
+  }
+}
+
+.form-check-inline {
+  display: inline-flex;
+  margin-right: $spacing-6;
+}
+
+// -----------------------------------------------------------------------------
+// Form Validation States
+// -----------------------------------------------------------------------------
+
+.form-group {
+  &.has-error {
+    input,
+    select,
+    textarea {
+      border-color: $color-danger;
+      
+      &:focus {
+        border-color: $color-danger;
+        box-shadow: 0 0 0 3px rgba($color-danger, 0.25);
+      }
+    }
+  }
+  
+  &.has-success {
+    input,
+    select,
+    textarea {
+      border-color: $color-success;
+      
+      &:focus {
+        border-color: $color-success;
+        box-shadow: 0 0 0 3px rgba($color-success, 0.25);
+      }
+    }
+  }
+}
+
+.error-message,
+.success-message,
+.help-text {
+  display: block;
+  margin-top: $spacing-2;
+  font-size: $font-size-sm;
+}
+
+.error-message {
+  color: $color-danger;
+}
+
+.success-message {
+  color: $color-success;
+}
+
+.help-text {
+  color: $color-text-muted;
+}
+
+// Inline validation messages
+input,
+select,
+textarea {
+  &.error {
+    border-color: $color-danger;
+    
+    &:focus {
+      border-color: $color-danger;
+      box-shadow: 0 0 0 3px rgba($color-danger, 0.25);
+    }
+  }
+  
+  &.success {
+    border-color: $color-success;
+    
+    &:focus {
+      border-color: $color-success;
+      box-shadow: 0 0 0 3px rgba($color-success, 0.25);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Contact Form Styles
+// -----------------------------------------------------------------------------
+
+.contact-form {
+  background-color: $color-gray-50;
+  padding: $spacing-8;
+  border-radius: $border-radius-lg;
+  
+  @include media-down(sm) {
+    padding: $spacing-6;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Search Form Styles
+// -----------------------------------------------------------------------------
+
+.search-form {
+  position: relative;
+  
+  label {
+    display: block;
+    width: 100%;
+  }
+  
+  .search-field {
+    padding-right: $spacing-12;
+  }
+  
+  .search-submit {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    padding: 0 $spacing-5;
+    border: none;
+    border-radius: 0 $input-border-radius $input-border-radius 0;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// WordPress Comment Form
+// -----------------------------------------------------------------------------
+
+.comment-form {
+  .comment-notes {
+    margin-bottom: $spacing-5;
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+  }
+  
+  .comment-form-comment {
+    margin-bottom: $spacing-5;
+    
+    label {
+      @include visually-hidden;
+    }
+  }
+  
+  .comment-form-author,
+  .comment-form-email,
+  .comment-form-url {
+    @include media-up(md) {
+      float: left;
+      width: calc(33.333% - #{$spacing-3});
+      margin-right: $spacing-4;
+      
+      &:nth-child(3n) {
+        margin-right: 0;
+      }
+    }
+  }
+  
+  .form-submit {
+    clear: both;
+    padding-top: $spacing-4;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Fluent Forms Integration
+// -----------------------------------------------------------------------------
+
+.fluentform {
+  .ff-el-form-control {
+    @include form-control;
+  }
+  
+  .ff-el-group {
+    margin-bottom: $spacing-5;
+  }
+  
+  .ff-el-input--label {
+    display: inline-block;
+    margin-bottom: $spacing-2;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+    
+    .ff-el-is-required {
+      color: $color-danger;
+    }
+  }
+  
+  .ff-el-input--content {
+    position: relative;
+  }
+  
+  .ff-el-help-message {
+    display: block;
+    margin-top: $spacing-2;
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+  }
+  
+  .ff-el-is-error {
+    .ff-el-form-control {
+      border-color: $color-danger;
+      
+      &:focus {
+        border-color: $color-danger;
+        box-shadow: 0 0 0 3px rgba($color-danger, 0.25);
+      }
+    }
+    
+    .error {
+      display: block;
+      margin-top: $spacing-2;
+      font-size: $font-size-sm;
+      color: $color-danger;
+    }
+  }
+  
+  .ff-btn {
+    @include button-base;
+    
+    &.ff-btn-primary {
+      @include button-variant($color-primary);
+    }
+    
+    &.ff-btn-secondary {
+      @include button-variant($color-secondary);
+    }
+    
+    &.ff-btn-lg {
+      @extend .btn-lg;
+    }
+    
+    &.ff-btn-block {
+      display: block;
+      width: 100%;
+    }
+  }
+  
+  // Progress bar
+  .ff-step-progressbar {
+    margin-bottom: $spacing-8;
+    
+    .ff-progress-bar {
+      height: 4px;
+      background-color: $color-gray-200;
+      border-radius: 2px;
+      overflow: hidden;
+      
+      .ff-progress-bar-item {
+        height: 100%;
+        background-color: $color-primary;
+        transition: width $transition-base;
+      }
+    }
+    
+    .ff-step-titles {
+      display: flex;
+      justify-content: space-between;
+      margin-top: $spacing-3;
+      
+      .ff-step-title {
+        font-size: $font-size-sm;
+        color: $color-text-muted;
+        
+        &.ff-active {
+          color: $color-primary;
+          font-weight: $font-weight-medium;
+        }
+      }
+    }
+  }
+}

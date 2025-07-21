@@ -1,0 +1,115 @@
+{
+  "name": "slavuta-invest-theme",
+  "version": "1.0.0",
+  "description": "Custom WordPress theme for Slavuta Investment Portal",
+  "author": "Slavuta Development Team",
+  "license": "GPL-2.0-or-later",
+  "keywords": [
+    "wordpress",
+    "theme",
+    "investment",
+    "portal",
+    "vite",
+    "scss"
+  ],
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint:js": "eslint assets/js/**/*.js",
+    "lint:scss": "stylelint assets/scss/**/*.scss",
+    "lint": "npm run lint:js && npm run lint:scss",
+    "format": "prettier --write \"assets/**/*.{js,scss,json}\"",
+    "format:check": "prettier --check \"assets/**/*.{js,scss,json}\"",
+    "clean": "rimraf dist",
+    "wp-env:start": "wp-env start",
+    "wp-env:stop": "wp-env stop",
+    "wp-env:destroy": "wp-env destroy",
+    "theme:zip": "npm run build && npm run theme:copy && cd theme-dist && zip -r ../slavuta-invest-theme.zip . && cd .. && rimraf theme-dist",
+    "theme:copy": "mkdir -p theme-dist/slavuta-invest && rsync -av --exclude='node_modules' --exclude='src' --exclude='.*' --exclude='*.config.js' --exclude='package*.json' --exclude='theme-dist' --exclude='*.zip' ./ theme-dist/slavuta-invest/"
+  },
+  "dependencies": {
+    "swiper": "^11.0.5"
+  },
+  "devDependencies": {
+    "@wordpress/env": "^9.0.0",
+    "eslint": "^8.56.0",
+    "eslint-config-wordpress": "^2.0.0",
+    "imagemin": "^8.0.1",
+    "imagemin-gifsicle": "^7.0.0",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-optipng": "^8.0.0",
+    "imagemin-pngquant": "^9.0.2",
+    "imagemin-svgo": "^10.0.1",
+    "prettier": "^3.2.4",
+    "rimraf": "^5.0.5",
+    "sass": "^1.70.0",
+    "stylelint": "^16.2.0",
+    "stylelint-config-standard-scss": "^13.0.0",
+    "stylelint-order": "^6.0.4",
+    "vite": "^5.0.12",
+    "vite-plugin-imagemin": "^0.6.1",
+    "vite-plugin-static-copy": "^1.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": true,
+    "printWidth": 100,
+    "bracketSpacing": true,
+    "arrowParens": "always",
+    "endOfLine": "lf"
+  },
+  "stylelint": {
+    "extends": [
+      "stylelint-config-standard-scss",
+      "stylelint-order"
+    ],
+    "rules": {
+      "selector-class-pattern": null,
+      "scss/at-import-partial-extension": null,
+      "scss/no-global-function-names": null,
+      "color-function-notation": "legacy",
+      "alpha-value-notation": "number"
+    }
+  },
+  "eslintConfig": {
+    "extends": [
+      "wordpress"
+    ],
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 2021,
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-console": "warn",
+      "no-unused-vars": [
+        "error",
+        {
+          "argsIgnorePattern": "^_"
+        }
+      ]
+    },
+    "globals": {
+      "wp": "readonly",
+      "slavutaAjax": "readonly",
+      "google": "readonly",
+      "Swiper": "readonly"
+    }
+  }
+}

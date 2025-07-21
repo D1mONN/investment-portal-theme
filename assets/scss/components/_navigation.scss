@@ -1,0 +1,497 @@
+// FILE: assets/scss/components/_navigation.scss
+
+/**
+ * Navigation Component Styles
+ * 
+ * This file contains comprehensive styling for all navigation elements
+ * throughout the theme, including menus, breadcrumbs, and pagination.
+ */
+
+// -----------------------------------------------------------------------------
+// Navigation Links Base Styles
+// -----------------------------------------------------------------------------
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-2 $spacing-4;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  text-decoration: none;
+  border-radius: $border-radius;
+  transition: $transition-fast;
+  
+  &:hover {
+    color: $color-primary;
+    background-color: rgba($color-primary, 0.05);
+    text-decoration: none;
+  }
+  
+  &:focus {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+  
+  &.active,
+  &.current {
+    color: $color-primary;
+    background-color: rgba($color-primary, 0.1);
+  }
+  
+  // With icon
+  svg {
+    width: 20px;
+    height: 20px;
+    margin-right: $spacing-2;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// WordPress Menu Classes
+// -----------------------------------------------------------------------------
+
+.menu {
+  @include reset-list;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2;
+  
+  .menu-item {
+    position: relative;
+    
+    > a {
+      @extend .nav-link;
+    }
+    
+    // Current states
+    &.current-menu-item > a,
+    &.current-menu-ancestor > a,
+    &.current-menu-parent > a,
+    &.current_page_item > a,
+    &.current_page_ancestor > a {
+      color: $color-primary;
+      background-color: rgba($color-primary, 0.1);
+    }
+    
+    // Has children indicator
+    &.menu-item-has-children > a::after {
+      content: '';
+      display: inline-block;
+      width: 0;
+      height: 0;
+      margin-left: $spacing-2;
+      vertical-align: middle;
+      border-top: 4px solid currentColor;
+      border-right: 4px solid transparent;
+      border-left: 4px solid transparent;
+      transition: transform $transition-fast;
+    }
+    
+    &.menu-item-has-children:hover > a::after {
+      transform: rotate(180deg);
+    }
+  }
+  
+  // Submenu styles
+  .sub-menu {
+    @include reset-list;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    padding: $spacing-2 0;
+    background-color: $color-white;
+    border-radius: $border-radius;
+    box-shadow: $shadow-lg;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: $transition-fast;
+    z-index: $z-index-dropdown;
+    
+    .menu-item {
+      display: block;
+      
+      > a {
+        display: block;
+        padding: $spacing-3 $spacing-5;
+        font-size: $font-size-sm;
+        border-radius: 0;
+        
+        &:hover {
+          background-color: $color-gray-50;
+        }
+      }
+    }
+    
+    // Third level
+    .sub-menu {
+      top: 0;
+      left: 100%;
+      margin-left: $spacing-1;
+    }
+  }
+  
+  // Show on hover
+  .menu-item:hover > .sub-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+// Vertical menu variant
+.menu-vertical {
+  flex-direction: column;
+  gap: 0;
+  
+  .menu-item {
+    display: block;
+    
+    > a {
+      display: block;
+      border-radius: 0;
+    }
+  }
+  
+  .sub-menu {
+    position: static;
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    background-color: transparent;
+    padding-left: $spacing-6;
+    margin-top: $spacing-1;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Footer Navigation
+// -----------------------------------------------------------------------------
+
+.footer-menu {
+  @include reset-list;
+  
+  li {
+    margin-bottom: $spacing-3;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    a {
+      position: relative;
+      display: inline-block;
+      padding: $spacing-1 0;
+      font-size: $font-size-sm;
+      color: $color-gray-400;
+      text-decoration: none;
+      transition: $transition-fast;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background-color: $color-primary;
+        transition: width $transition-fast;
+      }
+      
+      &:hover {
+        color: $color-white;
+        
+        &::after {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Post Navigation
+// -----------------------------------------------------------------------------
+
+.post-navigation {
+  margin: $spacing-12 0;
+  padding: $spacing-8 0;
+  border-top: $border-width solid $border-color;
+  border-bottom: $border-width solid $border-color;
+  
+  .nav-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-6;
+    
+    @include media-down(sm) {
+      grid-template-columns: 1fr;
+      gap: $spacing-4;
+    }
+  }
+  
+  .nav-previous,
+  .nav-next {
+    a {
+      display: flex;
+      align-items: center;
+      gap: $spacing-3;
+      padding: $spacing-4;
+      text-decoration: none;
+      background-color: $color-gray-50;
+      border-radius: $border-radius;
+      transition: $transition-fast;
+      
+      &:hover {
+        background-color: $color-gray-100;
+        transform: translateY(-2px);
+        box-shadow: $shadow-md;
+      }
+    }
+    
+    .nav-subtitle {
+      display: block;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+      color: $color-text-muted;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: $spacing-1;
+    }
+    
+    .nav-title {
+      display: block;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      color: $color-text-primary;
+      @include line-clamp(2);
+    }
+  }
+  
+  .nav-previous {
+    text-align: left;
+    
+    svg {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      color: $color-primary;
+    }
+  }
+  
+  .nav-next {
+    text-align: right;
+    
+    @include media-down(sm) {
+      text-align: left;
+    }
+    
+    a {
+      flex-direction: row-reverse;
+    }
+    
+    svg {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      color: $color-primary;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Tabs Navigation
+// -----------------------------------------------------------------------------
+
+.tabs-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2;
+  margin-bottom: $spacing-6;
+  border-bottom: 2px solid $border-color;
+  
+  .tab-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: $spacing-3 $spacing-5;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: $transition-fast;
+    
+    &:hover {
+      color: $color-text-primary;
+      background-color: rgba($color-primary, 0.05);
+    }
+    
+    &.active {
+      color: $color-primary;
+      border-bottom-color: $color-primary;
+    }
+    
+    // Badge
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      height: 20px;
+      margin-left: $spacing-2;
+      padding: 0 $spacing-1;
+      font-size: $font-size-xs;
+      font-weight: $font-weight-semibold;
+      color: $color-white;
+      background-color: $color-primary;
+      border-radius: $border-radius-full;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Steps Navigation
+// -----------------------------------------------------------------------------
+
+.steps-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-8;
+  
+  .step {
+    flex: 1;
+    position: relative;
+    text-align: center;
+    
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background-color: $border-color;
+      z-index: -1;
+    }
+    
+    &.completed::after {
+      background-color: $color-success;
+    }
+  }
+  
+  .step-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin: 0 auto $spacing-2;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-muted;
+    background-color: $color-white;
+    border: 2px solid $border-color;
+    border-radius: $border-radius-full;
+    transition: $transition-fast;
+    
+    .step.active & {
+      color: $color-white;
+      background-color: $color-primary;
+      border-color: $color-primary;
+    }
+    
+    .step.completed & {
+      color: $color-white;
+      background-color: $color-success;
+      border-color: $color-success;
+      
+      // Checkmark icon
+      &::before {
+        content: '✓';
+      }
+    }
+  }
+  
+  .step-label {
+    display: block;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    
+    .step.active &,
+    .step.completed & {
+      color: $color-text-primary;
+      font-weight: $font-weight-medium;
+    }
+  }
+  
+  @include media-down(sm) {
+    .step-label {
+      display: none;
+    }
+    
+    .step-indicator {
+      width: 36px;
+      height: 36px;
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Mobile Navigation Overlay
+// -----------------------------------------------------------------------------
+
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($color-black, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: $transition-base;
+  z-index: $z-index-modal-backdrop;
+  
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Accessibility Navigation
+// -----------------------------------------------------------------------------
+
+.screen-reader-links {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  
+  a {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: $spacing-3 $spacing-5;
+    background-color: $color-primary;
+    color: $color-white;
+    text-decoration: none;
+    z-index: 999999;
+    
+    &:focus {
+      left: 0;
+      width: auto;
+      height: auto;
+      overflow: visible;
+      clip: auto;
+    }
+  }
+}
