@@ -8,6 +8,7 @@
 /node-modules/
 /investment-portal-theme/node-modules/
 /.idea/
+/.env
 /wp-admin/
 /wp-content/index.php
 /wp-content/languages
