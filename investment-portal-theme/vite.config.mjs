@@ -105,6 +105,10 @@ export default defineConfig(({ command, mode }) => {
     },
     
     server: {
+      host: true,
+      // Вмикає CORS, щоб браузер не блокував запити
+      cors: true,
+      // Явно вказуємо порт
       port: 5173,
       strictPort: true,
       hmr: {
