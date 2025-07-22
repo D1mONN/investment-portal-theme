@@ -1,43 +1,71 @@
+# FILE: docker-compose.yml (оновлена версія)
+
 version: '3.8'
 
 services:
+  # Сервіс db залишається без змін
   db:
-    image: mysql:8.0
-    container_name: wordpress_db
-    restart: always
+    image: mariadb:10.6
+    container_name: slavuta_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     networks:
-      - wordpress_network
+      - slavuta_network
 
+  # -- ПОЧАТОК ЗМІН --
+  # Сервіс WordPress (PHP-FPM)
   wordpress:
-    image: wordpress:latest
-    container_name: wordpress_app
-    restart: always
+    # Замість 'image' тепер використовуємо 'build' для збірки нашого образу з Dockerfile
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: slavuta_wordpress
+    restart: unless-stopped
     depends_on:
       - db
-    ports:
-      - "8000:80"
-    volumes:
-      - ./wordpress:/var/www/html
-      - ./php/php.ini:/usr/local/etc/php/conf.d/custom-php.ini
     environment:
       WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
-      WORDPRESS_DB_USER: ${MYSQL_USER}
-      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${DB_NAME}
       WORDPRESS_DEBUG: 1
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./investment-portal-theme:/var/www/html/wp-content/themes/slavuta-invest-theme
+      - ./plugins:/var/www/html/wp-content/plugins
+      # Монтуємо наш файл конфігурації Xdebug всередину контейнера
+      - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
     networks:
-      - wordpress_network
+      - slavuta_network
+  # -- КІНЕЦЬ ЗМІН --
+
+  # Сервіс nginx залишається без змін
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: slavuta_nginx
+    restart: unless-stopped
+    ports:
+      - "${HTTP_PORT}:80"
+    depends_on:
+      - wordpress
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./investment-portal-theme:/var/www/html/wp-content/themes/slavuta-invest-theme
+      - ./plugins:/var/www/html/wp-content/plugins
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - slavuta_network
 
 volumes:
   db_data:
+  wordpress_data:
 
 networks:
-  wordpress_network:
+  slavuta_network:
     driver: bridge
