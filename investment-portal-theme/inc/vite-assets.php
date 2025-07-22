@@ -42,7 +42,7 @@ class SlavutaViteAssets {
     private function check_dev_mode() {
         if (defined('WP_DEBUG') && WP_DEBUG === true) {
             // Використовуємо fsockopen для швидшої перевірки без таймаутів
-            $connection = @fsockopen( 'host.docker.internal', $this->vite_port, $errno, $errstr, 0.1 );
+            $connection = @fsockopen( 'localhost.ip', $this->vite_port, $errno, $errstr, 0.1 );
             if ( is_resource( $connection ) ) {
                 $this->is_dev = true;
                 fclose( $connection );
