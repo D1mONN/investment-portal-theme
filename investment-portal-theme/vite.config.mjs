@@ -125,12 +125,15 @@ export default defineConfig(({ command, mode }) => {
         },
       },
     },
-    
+
     css: {
       preprocessorOptions: {
         scss: {
-          },
-      },
+          // Цей рядок є ключовим. Він вказує Sass,
+          // що папка 'assets/scss' є кореневою для пошуку файлів.
+          includePaths: [path.resolve(__dirname, 'assets/scss')],
+        }
+      }
     },
     
     optimizeDeps: {
