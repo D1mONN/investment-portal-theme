@@ -6,9 +6,8 @@
  * This configuration handles the build process for all theme assets,
  * including JavaScript, SCSS, and image optimization.
  */
-
-import { defineConfig } from 'vite';
 import path from 'path';
+import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import imagemin from 'vite-plugin-imagemin';
 
@@ -94,25 +93,23 @@ export default defineConfig(({ command, mode }) => {
         },
       }),
     ].filter(Boolean),
-    
+
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, 'assets'),
-        '@js': path.resolve(__dirname, 'assets/js'),
         '@scss': path.resolve(__dirname, 'assets/scss'),
-        '@images': path.resolve(__dirname, 'assets/images'),
+        '@': path.resolve(__dirname, 'assets'),
       },
     },
     
     server: {
-      host: true,
+      host: '0.0.0.0',
       // Вмикає CORS, щоб браузер не блокував запити
       cors: true,
       // Явно вказуємо порт
       port: 5173,
       strictPort: true,
       hmr: {
-        host: '0.0.0.0',
+        host: 'localhost',
       },
       // Proxy WordPress site for development
       proxy: {
@@ -132,12 +129,7 @@ export default defineConfig(({ command, mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `
-            @import "@scss/abstracts/variables";
-            @import "@scss/abstracts/functions";
-            @import "@scss/abstracts/mixins";
-          `,
-        },
+          },
       },
     },
     
