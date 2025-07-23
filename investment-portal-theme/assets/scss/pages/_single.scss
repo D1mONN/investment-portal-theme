@@ -11,6 +11,9 @@
 // Single Post/Page Container
 // -----------------------------------------------------------------------------
 
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
 .single {
   .site-main {
     padding: $spacing-16 0;

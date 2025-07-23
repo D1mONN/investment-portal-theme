@@ -1,30 +1,29 @@
 // /assets/scss/main.scss
 
-// 1. Abstracts
-@use './abstracts/_variables.scss' as *;
-@use './abstracts/_functions.scss' as *;
-@use './abstracts/_mixins.scss' as *;
+// 1. Завантажуємо всі змінні, функції та міксіни через єдиний хаб.
+// Тепер вони будуть доступні в усіх наступних файлах.
+@use 'abstracts' as *;
 
 // 2. Base
-@use './base/_fonts.scss';
-@use './base/_normalize.scss';
-@use './base/_scaffolding.scss';
-@use './base/_typography.scss';
+@use 'base/fonts';
+@use 'base/normalize';
+@use 'base/scaffolding';
+@use 'base/typography';
 
 // 3. Themes
-@use './themes/_default.scss';
+@use 'themes/default';
 
 // 4. Components
-@use './components/_buttons.scss';
-@use './components/_cards.scss';
-@use './components/_forms.scss';
-@use './components/_swiper.scss';
+@use 'components/buttons';
+@use 'components/cards';
+@use 'components/forms';
+@use 'components/swiper';
 
 // 5. Layout
-@use './layout/_header.scss';
-@use './layout/_footer.scss';
-@use './layout/_sections.scss';
-@use './layout/_sidebar.scss';
+@use 'layout/header';
+@use 'layout/footer';
+@use 'layout/sections';
+@use 'layout/sidebar';
 
 // 6. Pages
-@use './pages/_home.scss';
+@use 'pages/home';

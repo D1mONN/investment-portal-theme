@@ -11,6 +11,9 @@
 // Header Container
 // -----------------------------------------------------------------------------
 
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
 .site-header {
   position: sticky;
   top: 0;

@@ -10,6 +10,8 @@
 // -----------------------------------------------------------------------------
 // Base Breadcrumbs Styles
 // -----------------------------------------------------------------------------
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
 
 .breadcrumbs-section {
   padding: $spacing-4 0;

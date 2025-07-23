@@ -11,6 +11,9 @@
 // Sidebar Container
 // -----------------------------------------------------------------------------
 
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
 .site-sidebar {
   font-size: $font-size-sm;
   

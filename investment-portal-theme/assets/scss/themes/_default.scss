@@ -11,6 +11,9 @@
 // Root CSS Custom Properties
 // -----------------------------------------------------------------------------
 
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
 :root {
   // Color scheme
   --color-primary: #{$color-primary};

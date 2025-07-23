@@ -119,7 +119,11 @@ export default defineConfig(({ command, mode }) => {
           changeOrigin: true,
           bypass: (req) => {
             // Bypass proxy for Vite assets
-            if (req.url.startsWith('/@') || req.url.startsWith('/node_modules')) {
+            if (
+                req.url.startsWith('/@') ||
+                req.url.startsWith('/node_modules') ||
+                req.url.startsWith('/assets/')
+            ) {
               return req.url;
             }
           },

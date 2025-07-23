@@ -11,6 +11,9 @@
 // Form Container Styles
 // -----------------------------------------------------------------------------
 
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
 form {
   margin-bottom: $spacing-6;
 }

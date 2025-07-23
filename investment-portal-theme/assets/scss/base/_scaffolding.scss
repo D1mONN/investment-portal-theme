@@ -1,0 +1,50 @@
+// /assets/scss/base/_scaffolding.scss
+
+// =============================================================================
+// Scaffolding
+// =============================================================================
+//
+// Базові стилі для основних HTML-елементів.
+
+@use '../abstracts/variables' as *;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  // Встановлює базовий розмір шрифту, що полегшує розрахунки rem.
+  // 1rem = 10px, якщо ви встановите 62.5%. Але 16px (100%) є більш надійним.
+  font-size: 100%; // 16px
+  scroll-behavior: smooth;
+}
+
+body {
+  // Колір фону та тексту беруться зі змінних
+  background-color: $body-bg;
+  color: $body-color;
+
+  // Забезпечує, що body завжди займає щонайменше висоту екрану.
+  min-height: 100vh;
+
+  // Покращує рендеринг тексту в більшості браузерів.
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Робить зображення та інші медіа-елементи адаптивними за замовчуванням.
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}

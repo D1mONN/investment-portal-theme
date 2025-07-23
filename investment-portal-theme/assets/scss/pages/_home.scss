@@ -11,6 +11,9 @@
 // Homepage General Styles
 // -----------------------------------------------------------------------------
 
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
 .home {
   // Remove default spacing for first section
   .site-main > section:first-child {

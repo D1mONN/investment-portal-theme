@@ -11,6 +11,10 @@
 // Responsive Breakpoints
 // -----------------------------------------------------------------------------
 
+@use 'variables' as *;
+@use 'sass:color';
+
+
 // Mobile-first media query mixin
 @mixin media-up($breakpoint) {
   @if $breakpoint == xs {
@@ -236,15 +240,14 @@
   color: $text-color;
   background-color: $bg-color;
   border-color: $bg-color;
-  
+
   &:hover {
-    background-color: darken($bg-color, 8%);
-    border-color: darken($bg-color, 8%);
+    background-color: color.adjust($bg-color, $lightness: -8%);
+    border-color: color.adjust($bg-color, $lightness: -8%);
   }
-  
   &:active {
-    background-color: darken($bg-color, 12%);
-    border-color: darken($bg-color, 12%);
+    background-color: color.adjust($bg-color, $lightness: -12%);
+    border-color: color.adjust($bg-color, $lightness: -12%);
   }
   
   &:focus {
