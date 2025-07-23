@@ -1,30 +1,30 @@
 // /assets/scss/main.scss
 
-// 1. Abstracts (змінні, функції, міксіни)
-@use 'abstracts/variables' as *;
-@use 'abstracts/functions' as *;
-@use 'abstracts/mixins' as *;
+// 1. Abstracts
+@use './abstracts/_variables.scss' as *;
+@use './abstracts/_functions.scss' as *;
+@use './abstracts/_mixins.scss' as *;
 
-// 2. Base (базові стилі, шрифти, нормалізація)
-@use 'base/fonts';
-@use 'base/normalize';
-@use 'base/scaffolding';
-@use 'base/typography';
+// 2. Base
+@use './base/_fonts.scss';
+@use './base/_normalize.scss';
+@use './base/_scaffolding.scss';
+@use './base/_typography.scss';
 
 // 3. Themes
-@use 'themes/default';
+@use './themes/_default.scss';
 
-// 4. Components (кнопки, картки, слайдери і т.д.)
-@use 'components/buttons';
-@use 'components/cards';
-@use 'components/forms';
-@use 'components/swiper';
+// 4. Components
+@use './components/_buttons.scss';
+@use './components/_cards.scss';
+@use './components/_forms.scss';
+@use './components/_swiper.scss';
 
-// 5. Layout (хедер, футер, секції)
-@use 'layout/header';
-@use 'layout/footer';
-@use 'layout/sections';
-@use 'layout/sidebar';
+// 5. Layout
+@use './layout/_header.scss';
+@use './layout/_footer.scss';
+@use './layout/_sections.scss';
+@use './layout/_sidebar.scss';
 
-// 6. Pages (стилі для конкретних сторінок)
-@use 'pages/home';
+// 6. Pages
+@use './pages/_home.scss';

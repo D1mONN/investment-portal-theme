@@ -6,18 +6,19 @@
  * This configuration handles the build process for all theme assets,
  * including JavaScript, SCSS, and image optimization.
  */
-import path from 'path';
 import { defineConfig } from 'vite';
+import viteImagemin from 'vite-plugin-imagemin';
+import path from 'path';
+import liveReload from 'vite-plugin-live-reload';
+import { fileURLToPath } from 'url';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
-import imagemin from 'vite-plugin-imagemin';
 
-// Theme directory configuration
-const themePath = './wp-content/themes/slavuta-invest';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default defineConfig(({ command, mode }) => {
   return {
-    base: command === 'build' ? './' : '/',
-    
+
     build: {
       outDir: path.resolve(__dirname, 'dist'),
       assetsDir: '',
@@ -64,7 +65,7 @@ export default defineConfig(({ command, mode }) => {
       }),
       
       // Image optimization for production
-      mode === 'production' && imagemin({
+      mode === 'production' && viteImagemin({
         gifsicle: {
           optimizationLevel: 7,
           interlaced: false,
@@ -126,15 +127,7 @@ export default defineConfig(({ command, mode }) => {
       },
     },
 
-    css: {
-      preprocessorOptions: {
-        scss: {
-          // Цей рядок є ключовим. Він вказує Sass,
-          // що папка 'assets/scss' є кореневою для пошуку файлів.
-          includePaths: [path.resolve(__dirname, 'assets/scss')],
-        }
-      }
-    },
+
     
     optimizeDeps: {
       include: ['swiper', 'swiper/modules'],
