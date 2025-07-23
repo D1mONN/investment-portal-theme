@@ -5,7 +5,6 @@
 #
 # Note: if you want to stage/commit WP core files
 # you can delete this whole section/until Configuration.
-/node-modules/
 /investment-portal-theme/node-modules/
 /.idea/
 /.env
@@ -50,3 +49,4 @@ wp-config.php
 # Note: If you wish to whitelist themes,
 # uncomment the next line
 #/wp-content/themes
+/investment-portal-theme/node_modules/
