@@ -1,0 +1,33 @@
+# Database Configuration
+DB_NAME=slavutska_investment
+DB_USER=slavutska_user
+DB_PASSWORD=secure_password_here
+DB_ROOT_PASSWORD=root_secure_password_here
+
+# WordPress Configuration
+WP_TABLE_PREFIX=si_
+WP_DEBUG=true
+WP_DEBUG_LOG=true
+WP_DEBUG_DISPLAY=false
+
+# Security Keys (generate new ones for production)
+AUTH_KEY=generate_unique_key_here
+SECURE_AUTH_KEY=generate_unique_key_here
+LOGGED_IN_KEY=generate_unique_key_here
+NONCE_KEY=generate_unique_key_here
+AUTH_SALT=generate_unique_salt_here
+SECURE_AUTH_SALT=generate_unique_salt_here
+LOGGED_IN_SALT=generate_unique_salt_here
+NONCE_SALT=generate_unique_salt_here
+
+# Email Configuration
+SMTP_HOST=mailhog
+SMTP_PORT=1025
+SMTP_USER=
+SMTP_PASSWORD=
+SMTP_FROM=noreply@slavutska-investment.local
+
+# Environment
+ENVIRONMENT=development
+SITE_URL=http://localhost
+ADMIN_EMAIL=admin@slavutska-investment.local

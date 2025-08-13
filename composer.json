@@ -1,0 +1,197 @@
+{
+    "name": "slavutska-hromada/investment-portal",
+    "description": "Інвестиційний портал Славутської міської територіальної громади",
+    "type": "wordpress-theme",
+    "keywords": [
+        "wordpress",
+        "theme",
+        "investment",
+        "ukraine",
+        "slavuta",
+        "government",
+        "portal"
+    ],
+    "homepage": "https://github.com/slavutska-hromada/investment-portal",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "CodeMaster",
+            "email": "tech@slavutska.gov.ua",
+            "role": "Developer"
+        },
+        {
+            "name": "Славутська громада",
+            "email": "info@slavutska.gov.ua",
+            "homepage": "https://slavutska.gov.ua",
+            "role": "Client"
+        }
+    ],
+    "support": {
+        "email": "tech@slavutska.gov.ua",
+        "source": "https://github.com/slavutska-hromada/investment-portal",
+        "issues": "https://github.com/slavutska-hromada/investment-portal/issues"
+    },
+    "require": {
+        "php": ">=8.1",
+        "composer/installers": "^2.2",
+        "symfony/var-dumper": "^6.3",
+        "vlucas/phpdotenv": "^5.5",
+        "monolog/monolog": "^3.4",
+        "guzzlehttp/guzzle": "^7.8",
+        "league/csv": "^9.10",
+        "respect/validation": "^2.2",
+        "ramsey/uuid": "^4.7",
+        "nesbot/carbon": "^2.72"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.4",
+        "squizlabs/php_codesniffer": "^3.7",
+        "phpmd/phpmd": "^2.14",
+        "phpstan/phpstan": "^1.10",
+        "rector/rector": "^0.18",
+        "wp-coding-standards/wpcs": "^3.0",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+        "roave/security-advisories": "dev-latest",
+        "symfony/thanks": "^1.2"
+    },
+    "suggest": {
+        "wp-cli/wp-cli": "Command line interface for WordPress",
+        "wpackagist-plugin/redis-cache": "Redis object cache for WordPress",
+        "wpackagist-plugin/wordpress-seo": "SEO optimization plugin",
+        "wpackagist-plugin/wordfence": "Security plugin for WordPress",
+        "wpackagist-plugin/updraftplus": "Backup and restore plugin"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://wpackagist.org",
+            "only": ["wpackagist-plugin/*", "wpackagist-theme/*"]
+        }
+    ],
+    "extra": {
+        "installer-paths": {
+            "src/plugins/{$name}/": ["type:wordpress-plugin"],
+            "src/themes/{$name}/": ["type:wordpress-theme"],
+            "src/mu-plugins/{$name}/": ["type:wordpress-muplugin"]
+        },
+        "wordpress-install-dir": "src/wordpress"
+    },
+    "autoload": {
+        "psr-4": {
+            "SlavutskaInvestment\\": "src/themes/slavutska-investment/inc/classes/",
+            "SlavutskaInvestment\\Plugins\\": "src/plugins/slavutska-investment-manager/includes/"
+        },
+        "files": [
+            "src/themes/slavutska-investment/inc/helpers.php",
+            "src/themes/slavutska-investment/inc/constants.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SlavutskaInvestment\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "@composer dump-autoload --optimize",
+            "@setup-wp-coding-standards"
+        ],
+        "post-update-cmd": [
+            "@composer dump-autoload --optimize",
+            "@setup-wp-coding-standards"
+        ],
+        "setup-wp-coding-standards": [
+            "./vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs"
+        ],
+        "check-style": [
+            "./vendor/bin/phpcs"
+        ],
+        "fix-style": [
+            "./vendor/bin/phpcbf"
+        ],
+        "analyze": [
+            "./vendor/bin/phpstan analyse"
+        ],
+        "test": [
+            "./vendor/bin/phpunit"
+        ],
+        "test-coverage": [
+            "./vendor/bin/phpunit --coverage-html coverage"
+        ],
+        "security": [
+            "@composer audit"
+        ],
+        "quality": [
+            "@check-style",
+            "@analyze",
+            "@test"
+        ],
+        "setup": [
+            "@composer install --optimize-autoloader",
+            "@setup-wp-coding-standards",
+            "npm install",
+            "npm run build:dev"
+        ],
+        "build": [
+            "npm run build",
+            "@composer dump-autoload --optimize --no-dev"
+        ],
+        "clean": [
+            "rm -rf vendor/ node_modules/ src/themes/slavutska-investment/assets/dist/",
+            "composer clear-cache",
+            "npm cache clean --force"
+        ]
+    },
+    "scripts-descriptions": {
+        "check-style": "Перевірка стандартів кодування",
+        "fix-style": "Автоматичне виправлення стилю коду", 
+        "analyze": "Статичний аналіз коду з PHPStan",
+        "test": "Запуск тестів",
+        "test-coverage": "Запуск тестів з покриттям",
+        "security": "Перевірка безпеки залежностей",
+        "quality": "Повна перевірка якості коду",
+        "setup": "Повне налаштування проекту",
+        "build": "Збірка для продакшн",
+        "clean": "Очищення всіх згенерованих файлів"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "classmap-authoritative": false,
+        "apcu-autoloader": true,
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/installers": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "symfony/thanks": true
+        },
+        "platform": {
+            "php": "8.1"
+        },
+        "preferred-install": {
+            "*": "dist"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "archive": {
+        "exclude": [
+            "/tests",
+            "/docs",
+            "/.github",
+            "/node_modules",
+            "/vendor",
+            "/.git",
+            "/.env*",
+            "/docker",
+            "/scripts",
+            "/coverage",
+            "phpunit.xml",
+            "phpcs.xml",
+            "phpstan.neon",
+            "rector.php",
+            "package*.json",
+            "webpack.config.js",
+            "*.log"
+        ]
+    }
+}
