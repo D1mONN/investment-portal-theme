@@ -26,6 +26,8 @@ get_header();
                     <p class="archive-description">
                         <?php _e('Якісні земельні ресурси для бізнесу та інвестицій у Славутській громаді', 'slavutska-investment'); ?>
                     </p>
+					<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+					<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
                 </header>
                 
                 <div class="archive-stats">
@@ -463,169 +465,418 @@ get_header();
 </div>
 
 <script>
-// Фільтрація та сортування земельних ділянок
+/**
+ * Карта земельних ділянок з використанням Leaflet.js
+ * Інтеграція з WordPress REST API
+ */
+
 document.addEventListener('DOMContentLoaded', function() {
-    const filterElements = {
-        landType: document.getElementById('land-type-filter'),
-        areaMin: document.getElementById('area-min'),
-        areaMax: document.getElementById('area-max'),
-        priceMin: document.getElementById('price-min'),
-        priceMax: document.getElementById('price-max'),
-        purpose: document.getElementById('purpose-filter'),
-        sort: document.getElementById('sort-select'),
-        reset: document.getElementById('reset-filters'),
-        viewToggle: document.querySelectorAll('.view-btn'),
-        grid: document.getElementById('land-plots-grid')
+    let map = null;
+    let markersLayer = null;
+    let plotsData = [];
+    
+    // Конфігурація карти
+    const mapConfig = {
+        center: [50.2782, 26.8635], // Координати Славути
+        zoom: 12,
+        maxZoom: 18,
+        minZoom: 8
     };
-
-    // Фільтрація
-    function filterLandPlots() {
-        const cards = filterElements.grid.querySelectorAll('.land-plot-card');
-        const filters = {
-            landType: filterElements.landType.value,
-            areaMin: parseFloat(filterElements.areaMin.value) || 0,
-            areaMax: parseFloat(filterElements.areaMax.value) || Infinity,
-            priceMin: parseFloat(filterElements.priceMin.value) || 0,
-            priceMax: parseFloat(filterElements.priceMax.value) || Infinity,
-            purpose: filterElements.purpose.value
-        };
-
-        cards.forEach(card => {
-            let show = true;
-
-            // Фільтр типу землі
-            if (filters.landType && !card.dataset.types.includes(filters.landType)) {
-                show = false;
-            }
-
-            // Фільтр площі
-            const area = parseFloat(card.dataset.area) || 0;
-            if (area < filters.areaMin || area > filters.areaMax) {
-                show = false;
-            }
-
-            // Фільтр ціни
-            const price = parseFloat(card.dataset.price) || 0;
-            if (price < filters.priceMin || price > filters.priceMax) {
-                show = false;
-            }
-
-            // Фільтр призначення
-            if (filters.purpose && !card.dataset.purpose.toLowerCase().includes(filters.purpose)) {
-                show = false;
-            }
-
-            card.style.display = show ? '' : 'none';
-        });
-
-        updateResultsCount();
-    }
-
-    // Сортування
-    function sortLandPlots() {
-        const container = filterElements.grid;
-        const cards = Array.from(container.querySelectorAll('.land-plot-card'));
-        const sortType = filterElements.sort.value;
-
-        cards.sort((a, b) => {
-            switch (sortType) {
-                case 'area-desc':
-                    return parseFloat(b.dataset.area || 0) - parseFloat(a.dataset.area || 0);
-                case 'area-asc':
-                    return parseFloat(a.dataset.area || 0) - parseFloat(b.dataset.area || 0);
-                case 'price-desc':
-                    return parseFloat(b.dataset.price || 0) - parseFloat(a.dataset.price || 0);
-                case 'price-asc':
-                    return parseFloat(a.dataset.price || 0) - parseFloat(b.dataset.price || 0);
-                case 'title-asc':
-                    return a.querySelector('.land-plot-card-title a').textContent.localeCompare(
-                        b.querySelector('.land-plot-card-title a').textContent
-                    );
-                case 'date-asc':
-                    return new Date(a.querySelector('.card-date span').textContent.split('.').reverse().join('-')) - 
-                           new Date(b.querySelector('.card-date span').textContent.split('.').reverse().join('-'));
-                default: // date-desc
-                    return new Date(b.querySelector('.card-date span').textContent.split('.').reverse().join('-')) - 
-                           new Date(a.querySelector('.card-date span').textContent.split('.').reverse().join('-'));
-            }
-        });
-
-        cards.forEach(card => container.appendChild(card));
-    }
-
-    // Оновлення лічильника результатів
-    function updateResultsCount() {
-        const visibleCards = filterElements.grid.querySelectorAll('.land-plot-card[style=""], .land-plot-card:not([style])');
-        const countElement = document.querySelector('.count-text');
-        const count = visibleCards.length;
+    
+    // Ініціалізація карти
+    function initializeMap() {
+        const mapContainer = document.getElementById('plots-map');
+        if (!mapContainer) {
+            console.error('Контейнер карти не знайдено');
+            return;
+        }
         
-        if (countElement) {
-            countElement.innerHTML = `Знайдено <strong>${count}</strong> ${count === 1 ? 'ділянку' : count < 5 ? 'ділянки' : 'ділянок'}`;
+        // Очищаємо placeholder
+        mapContainer.innerHTML = '';
+        
+        // Створюємо карту
+        map = L.map('plots-map', {
+            center: mapConfig.center,
+            zoom: mapConfig.zoom,
+            maxZoom: mapConfig.maxZoom,
+            minZoom: mapConfig.minZoom,
+            zoomControl: true,
+            scrollWheelZoom: true
+        });
+        
+        // Додаємо тайли OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 18
+        }).addTo(map);
+        
+        // Створюємо групу для маркерів
+        markersLayer = L.layerGroup().addTo(map);
+        
+        // Завантажуємо дані ділянок
+        loadPlotsData();
+        
+        console.log('Карта ініціалізована успішно');
+    }
+    
+    // Завантаження даних ділянок з API
+    async function loadPlotsData() {
+        try {
+            showMapLoading(true);
+            
+            const response = await fetch('/wp-json/slavutska/v1/map-data', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-WP-Nonce': window.wpApiSettings?.nonce || ''
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.success && Array.isArray(data.plots)) {
+                plotsData = data.plots;
+                displayPlotsOnMap(plotsData);
+                updateMapBounds();
+            } else {
+                throw new Error(data.message || 'Невалідні дані від API');
+            }
+            
+        } catch (error) {
+            console.error('Помилка завантаження даних ділянок:', error);
+            showMapError('Не вдалося завантажити дані ділянок. Спробуйте оновити сторінку.');
+        } finally {
+            showMapLoading(false);
         }
     }
-
-    // Перемикання виду
-    filterElements.viewToggle.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const view = this.dataset.view;
-            
-            filterElements.viewToggle.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            
-            if (view === 'map') {
-                filterElements.grid.style.display = 'none';
-                document.querySelector('.interactive-map').style.display = 'block';
-                // Тут можна додати логіку для показу ділянок на карті
-            } else {
-                filterElements.grid.style.display = '';
-                document.querySelector('.interactive-map').style.display = 'none';
-                filterElements.grid.className = view === 'list' ? 'land-plots-list' : 'land-plots-grid';
+    
+    // Відображення ділянок на карті
+    function displayPlotsOnMap(plots) {
+        // Очищаємо попередні маркери
+        markersLayer.clearLayers();
+        
+        if (!plots.length) {
+            showMapMessage('Ділянки для відображення відсутні');
+            return;
+        }
+        
+        plots.forEach(plot => {
+            if (plot.latitude && plot.longitude) {
+                createPlotMarker(plot);
             }
         });
-    });
-
-    // Обробники подій
-    [filterElements.landType, filterElements.purpose].forEach(el => {
-        if (el) el.addEventListener('change', filterLandPlots);
-    });
-
-    [filterElements.areaMin, filterElements.areaMax, filterElements.priceMin, filterElements.priceMax].forEach(el => {
-        if (el) el.addEventListener('input', debounce(filterLandPlots, 500));
-    });
-
-    if (filterElements.sort) {
-        filterElements.sort.addEventListener('change', () => {
-            sortLandPlots();
-            filterLandPlots();
+        
+        console.log(`Відображено ${plots.length} ділянок на карті`);
+    }
+    
+    // Створення маркера для ділянки
+    function createPlotMarker(plot) {
+        const lat = parseFloat(plot.latitude);
+        const lng = parseFloat(plot.longitude);
+        
+        if (isNaN(lat) || isNaN(lng)) {
+            console.warn('Невалідні координати для ділянки:', plot.id);
+            return;
+        }
+        
+        // Створюємо кастомну іконку
+        const customIcon = L.divIcon({
+            className: 'custom-plot-marker',
+            html: `
+                <div class="marker-icon">
+                    <i class="icon-map-pin"></i>
+                </div>
+            `,
+            iconSize: [30, 30],
+            iconAnchor: [15, 30],
+            popupAnchor: [0, -30]
+        });
+        
+        // Створюємо маркер
+        const marker = L.marker([lat, lng], {
+            icon: customIcon,
+            title: plot.title || 'Земельна ділянка'
+        });
+        
+        // Створюємо popup з інформацією
+        const popupContent = createPopupContent(plot);
+        marker.bindPopup(popupContent, {
+            maxWidth: 300,
+            className: 'plot-popup'
+        });
+        
+        // Додаємо обробник кліку
+        marker.on('click', function() {
+            // Додаткова логіка при кліку (опціонально)
+            trackMarkerClick(plot.id);
+        });
+        
+        // Додаємо маркер до групи
+        markersLayer.addLayer(marker);
+    }
+    
+    // Створення контенту для popup
+    function createPopupContent(plot) {
+        const area = plot.area ? parseFloat(plot.area).toFixed(2) : 'Не вказано';
+        const price = plot.price_per_hectare ? 
+            new Intl.NumberFormat('uk-UA').format(plot.price_per_hectare) : 'Не вказано';
+        const totalPrice = plot.area && plot.price_per_hectare ? 
+            new Intl.NumberFormat('uk-UA').format(plot.area * plot.price_per_hectare) : null;
+        
+        return `
+            <div class="plot-popup-content">
+                <div class="popup-header">
+                    <h3 class="popup-title">${plot.title || 'Земельна ділянка'}</h3>
+                    ${plot.land_type ? `<span class="popup-badge">${plot.land_type}</span>` : ''}
+                </div>
+                
+                <div class="popup-info">
+                    ${plot.cadastral_number ? `
+                        <div class="popup-meta">
+                            <i class="icon-hash"></i>
+                            <span>Кадастровий номер: ${plot.cadastral_number}</span>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="popup-meta">
+                        <i class="icon-maximize"></i>
+                        <span>Площа: ${area} га</span>
+                    </div>
+                    
+                    <div class="popup-meta">
+                        <i class="icon-dollar-sign"></i>
+                        <span>Ціна за га: ${price} грн</span>
+                    </div>
+                    
+                    ${totalPrice ? `
+                        <div class="popup-meta popup-meta--highlight">
+                            <i class="icon-calculator"></i>
+                            <span>Загальна вартість: ${totalPrice} грн</span>
+                        </div>
+                    ` : ''}
+                    
+                    ${plot.purpose ? `
+                        <div class="popup-meta">
+                            <i class="icon-target"></i>
+                            <span>Призначення: ${plot.purpose}</span>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <div class="popup-actions">
+                    <a href="${plot.permalink}" class="btn btn--primary btn--small" target="_blank">
+                        Детальніше
+                        <i class="icon-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        `;
+    }
+    
+    // Оновлення меж карти для показу всіх ділянок
+    function updateMapBounds() {
+        if (!plotsData.length || !map) return;
+        
+        const validPlots = plotsData.filter(plot => 
+            plot.latitude && plot.longitude && 
+            !isNaN(parseFloat(plot.latitude)) && 
+            !isNaN(parseFloat(plot.longitude))
+        );
+        
+        if (!validPlots.length) return;
+        
+        const bounds = L.latLngBounds(
+            validPlots.map(plot => [
+                parseFloat(plot.latitude), 
+                parseFloat(plot.longitude)
+            ])
+        );
+        
+        map.fitBounds(bounds, {
+            padding: [20, 20],
+            maxZoom: 15
         });
     }
-
-    if (filterElements.reset) {
-        filterElements.reset.addEventListener('click', () => {
-            filterElements.landType.value = '';
-            filterElements.areaMin.value = '';
-            filterElements.areaMax.value = '';
-            filterElements.priceMin.value = '';
-            filterElements.priceMax.value = '';
-            filterElements.purpose.value = '';
-            filterElements.sort.value = 'date-desc';
+    
+    // Показати всі ділянки
+    function showAllPlots() {
+        if (!map || !plotsData.length) return;
+        
+        displayPlotsOnMap(plotsData);
+        updateMapBounds();
+    }
+    
+    // Скинути карту до початкового стану
+    function resetMap() {
+        if (!map) return;
+        
+        map.setView(mapConfig.center, mapConfig.zoom);
+        markersLayer.clearLayers();
+        displayPlotsOnMap(plotsData);
+    }
+    
+    // Фільтрація ділянок на карті
+    function filterMapPlots(filteredCards) {
+        if (!map || !plotsData.length) return;
+        
+        // Отримуємо ID видимих ділянок
+        const visiblePlotIds = Array.from(filteredCards)
+            .filter(card => card.style.display !== 'none')
+            .map(card => card.dataset.plotId || extractPlotIdFromCard(card));
+        
+        // Фільтруємо дані ділянок
+        const filteredPlots = plotsData.filter(plot => 
+            visiblePlotIds.includes(plot.id.toString())
+        );
+        
+        displayPlotsOnMap(filteredPlots);
+        
+        if (filteredPlots.length) {
+            updateMapBounds();
+        }
+    }
+    
+    // Витягання ID ділянки з картки (якщо не вказано в data-plot-id)
+    function extractPlotIdFromCard(card) {
+        const link = card.querySelector('.land-plot-card-title a');
+        if (link) {
+            const url = link.getAttribute('href');
+            const match = url.match(/\/land-plot\/([^\/]+)\//);
+            return match ? match[1] : null;
+        }
+        return null;
+    }
+    
+    // Показ індикатора завантаження
+    function showMapLoading(show) {
+        const mapContainer = document.getElementById('plots-map');
+        if (!mapContainer) return;
+        
+        if (show) {
+            mapContainer.innerHTML = `
+                <div class="map-placeholder">
+                    <div class="loading-spinner"></div>
+                    <p>Завантаження карти з ділянками...</p>
+                </div>
+            `;
+        }
+    }
+    
+    // Показ повідомлення про помилку
+    function showMapError(message) {
+        const mapContainer = document.getElementById('plots-map');
+        if (!mapContainer) return;
+        
+        mapContainer.innerHTML = `
+            <div class="map-placeholder map-error">
+                <i class="icon-alert-circle"></i>
+                <p>${message}</p>
+                <button onclick="location.reload()" class="btn btn--primary btn--small">
+                    Оновити сторінку
+                </button>
+            </div>
+        `;
+    }
+    
+    // Показ інформаційного повідомлення
+    function showMapMessage(message) {
+        const mapContainer = document.getElementById('plots-map');
+        if (!mapContainer) return;
+        
+        if (map) {
+            // Якщо карта вже ініціалізована, показуємо повідомлення поверх
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'map-overlay-message';
+            messageDiv.innerHTML = `<p>${message}</p>`;
+            mapContainer.appendChild(messageDiv);
             
-            filterLandPlots();
-            sortLandPlots();
-        });
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 3000);
+        }
     }
-
-    function debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
+    
+    // Трекінг кліків по маркерах (аналітика)
+    function trackMarkerClick(plotId) {
+        // Відправка події в Google Analytics або інший сервіс
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'map_marker_click', {
+                'plot_id': plotId,
+                'page_location': window.location.href
+            });
+        }
+    }
+    
+    // Обробники кнопок управління картою
+    const showAllBtn = document.getElementById('show-all-plots');
+    const resetMapBtn = document.getElementById('reset-map');
+    
+    if (showAllBtn) {
+        showAllBtn.addEventListener('click', showAllPlots);
+    }
+    
+    if (resetMapBtn) {
+        resetMapBtn.addEventListener('click', resetMap);
+    }
+    
+    // Інтеграція з фільтрами
+    const originalFilterFunction = window.filterLandPlots;
+    if (typeof originalFilterFunction === 'function') {
+        window.filterLandPlots = function() {
+            originalFilterFunction();
+            
+            // Оновлюємо карту після фільтрації
+            const grid = document.getElementById('land-plots-grid');
+            if (grid) {
+                const visibleCards = grid.querySelectorAll('.land-plot-card[style=""], .land-plot-card:not([style])');
+                filterMapPlots(visibleCards);
+            }
         };
     }
+    
+    // Обробник кнопок "показати на карті" в картках
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.card-map-btn')) {
+            e.preventDefault();
+            const btn = e.target.closest('.card-map-btn');
+            const lat = parseFloat(btn.dataset.lat);
+            const lng = parseFloat(btn.dataset.lng);
+            const title = btn.dataset.title;
+            
+            if (map && !isNaN(lat) && !isNaN(lng)) {
+                // Переключаємося на вид карти
+                const mapViewBtn = document.querySelector('.view-btn--map');
+                if (mapViewBtn) {
+                    mapViewBtn.click();
+                }
+                
+                // Центруємо карту на ділянці
+                map.setView([lat, lng], 16);
+                
+                // Знаходимо і відкриваємо відповідний popup
+                markersLayer.eachLayer(function(layer) {
+                    if (layer.getLatLng().lat === lat && layer.getLatLng().lng === lng) {
+                        layer.openPopup();
+                    }
+                });
+            }
+        }
+    });
+    
+    // Ініціалізація при завантаженні сторінки
+    initializeMap();
+    
+    // Експорт функцій для глобального доступу
+    window.landPlotsMap = {
+        showAllPlots,
+        resetMap,
+        filterMapPlots,
+        reloadData: loadPlotsData
+    };
 });
 </script>
 

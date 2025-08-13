@@ -278,3 +278,41 @@ function slavutska_verify_nonce($nonce, $action = 'slavutska_action')
 {
     return wp_verify_nonce($nonce, $action);
 }
+add_action('rest_api_init', function() {
+    register_rest_route('slavutska/v1', '/map-data', [
+        'methods' => 'GET',
+        'callback' => 'get_land_plots_map_data',
+        'permission_callback' => '__return_true'
+    ]);
+});
+
+function get_land_plots_map_data() {
+    $plots = get_posts([
+        'post_type' => 'land_plot',
+        'posts_per_page' => -1,
+        'post_status' => 'publish'
+    ]);
+    
+    $data = [];
+    foreach ($plots as $plot) {
+        $latitude = get_post_meta($plot->ID, '_latitude', true);
+        $longitude = get_post_meta($plot->ID, '_longitude', true);
+        
+        if ($latitude && $longitude) {
+            $data[] = [
+                'id' => $plot->ID,
+                'title' => $plot->post_title,
+                'permalink' => get_permalink($plot->ID),
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'area' => get_post_meta($plot->ID, '_area', true),
+                'price_per_hectare' => get_post_meta($plot->ID, '_price_per_hectare', true),
+                'cadastral_number' => get_post_meta($plot->ID, '_cadastral_number', true),
+                'purpose' => get_post_meta($plot->ID, '_purpose', true),
+                'land_type' => get_the_terms($plot->ID, 'land_type')[0]->name ?? null
+            ];
+        }
+    }
+    
+    return ['success' => true, 'plots' => $data];
+}
