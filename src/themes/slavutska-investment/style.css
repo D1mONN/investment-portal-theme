@@ -1,0 +1,215 @@
+/*
+Theme Name: Славутський інвестиційний портал
+Theme URI: https://github.com/slavutska-hromada/investment-portal
+Description: Сучасна WordPress тема для інвестиційного порталу Славутської міської територіальної громади Хмельницької області. Включає функціонал для презентації інвестиційних пропозицій, земельних ділянок та контактної інформації з повною підтримкою responsive дизайну та accessibility.
+Version: 1.0.0
+Author: CodeMaster
+Author URI: https://slavutska.gov.ua
+License: GPL v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: slavutska-investment
+Domain Path: /languages
+Requires at least: 6.0
+Tested up to: 6.4
+Requires PHP: 8.1
+Tags: government, investment, custom-post-types, responsive-layout, accessibility-ready, translation-ready, custom-header, custom-background, custom-logo, custom-menu, featured-images, threaded-comments, theme-options
+
+Славутський інвестиційний портал WordPress Theme
+Copyright (C) 2024 Славутська міська територіальна громада
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+*/
+
+/**
+ * ВАЖЛИВО: Цей файл містить тільки мета-інформацію про тему
+ * Всі основні стилі знаходяться в assets/css/main.css
+ * та підключаються через functions.php
+ */
+
+/* Нормалізація та базові стилі для редактора WordPress */
+.editor-styles-wrapper {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #334155;
+}
+
+/* Стилі для блоків Gutenberg */
+.wp-block {
+    max-width: 100%;
+}
+
+.wp-block[data-align="wide"] {
+    max-width: 1200px;
+}
+
+.wp-block[data-align="full"] {
+    max-width: none;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+}
+
+/* Кольорова палітра теми для редактора */
+.has-primary-blue-color {
+    color: #1e40af !important;
+}
+
+.has-primary-blue-background-color {
+    background-color: #1e40af !important;
+}
+
+.has-accent-green-color {
+    color: #059669 !important;
+}
+
+.has-accent-green-background-color {
+    background-color: #059669 !important;
+}
+
+.has-gold-color {
+    color: #f59e0b !important;
+}
+
+.has-gold-background-color {
+    background-color: #f59e0b !important;
+}
+
+/* Базові стилі для забезпечення сумісності */
+.alignleft {
+    float: left;
+    margin: 0 1.5em 1.5em 0;
+}
+
+.alignright {
+    float: right;
+    margin: 0 0 1.5em 1.5em;
+}
+
+.aligncenter {
+    clear: both;
+    display: block;
+    margin: 1.5em auto;
+}
+
+.alignwide {
+    margin-left: auto;
+    margin-right: auto;
+    clear: both;
+}
+
+.alignfull {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    max-width: 100vw;
+    clear: both;
+}
+
+/* WordPress галереї */
+.wp-block-gallery {
+    margin: 0 0 1.5em;
+}
+
+/* WordPress коментарі */
+.comment-content a {
+    word-wrap: break-word;
+}
+
+.bypostauthor {
+    display: block;
+}
+
+/* Accessibility класи */
+.screen-reader-text {
+    clip: rect(1px, 1px, 1px, 1px);
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+}
+
+.screen-reader-text:focus {
+    background-color: #f1f1f1;
+    border-radius: 3px;
+    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+    clip: auto !important;
+    color: #21759b;
+    display: block;
+    font-size: 14px;
+    font-size: 0.875rem;
+    font-weight: bold;
+    height: auto;
+    left: 5px;
+    line-height: normal;
+    padding: 15px 23px 14px;
+    text-decoration: none;
+    top: 5px;
+    width: auto;
+    z-index: 100000;
+}
+
+/* Очищення флоатів */
+.clear:before,
+.clear:after {
+    content: "";
+    display: table;
+    table-layout: fixed;
+}
+
+.clear:after {
+    clear: both;
+}
+
+/* Responsive зображення */
+img {
+    height: auto;
+    max-width: 100%;
+}
+
+/* Стилі для вбудованих елементів */
+embed,
+iframe,
+object {
+    max-width: 100%;
+}
+
+/* Базова типографія */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Manrope', 'Inter', sans-serif;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0 0 0.75em;
+    color: #1e293b;
+}
+
+p {
+    margin: 0 0 1.5em;
+    line-height: 1.6;
+}
+
+/* Зворотна сумісність з WordPress */
+.sticky {
+    display: block;
+}
+
+.gallery-caption {
+    display: block;
+}
+
+/* Стилі для виведення помилок у development режимі */
+body.wp-admin .error,
+body.wp-admin .notice {
+    margin: 5px 15px 2px;
+}
+
+/* Основні стилі підключаються через functions.php */
